@@ -6,14 +6,14 @@ using System.Web;
 namespace eSale.Models
 {
     /// <summary>
-    /// 
+    /// 訂單服務
     /// </summary>
     public class OrderService
     {
         /// <summary>
         /// 新增訂單
         /// </summary>
-        public void InsertOrder()
+        public void InsertOrder(Models.Order order)
         {
 
         }
