@@ -14,7 +14,6 @@ namespace Layer.Controllers
             eSaleService.OrderService orderService = new eSaleService.OrderService();
             var data=orderService.GetOrderById("1");
             ViewBag.data = data.CustId + " . " + data.CustName + " . " + data.OrderId;
-
             return View();
         }
     }
