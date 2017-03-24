@@ -199,7 +199,7 @@
     <Compile Include="Areas\Emp\EmpAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\LayoutController.cs" />
+    <Compile Include="Controllers\LayoutTestController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Global.asax.cs">
@@ -285,8 +285,8 @@
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Order\InsertOrder.cshtml" />
     <Content Include="Views\_LayoutPage.cshtml" />
-    <Content Include="Views\Layout\Index.cshtml" />
-    <Content Include="Views\Shared\_SysDataPartial.cshtml" />
+    <Content Include="Views\LayoutTest\Index.cshtml" />
+    <Content Include="Views\Shared\_SysDatePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

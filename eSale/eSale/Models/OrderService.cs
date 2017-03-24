@@ -51,7 +51,10 @@ namespace eSale.Models
         /// <returns></returns>
         public List<Models.Order> GetOrders()
         {
-            return new List<Order>();
+            List<Models.Order> result = new List<Order>();
+            result.Add(new Order() { CustId = "GSS", CustName = "叡揚資訊", EmpId = 1, EmpName = "水母白" });
+            result.Add(new Order() { CustId = "KUAS", CustName = "高應大", EmpId = 2, EmpName = "幾米白" });
+            return result;
         }
 
 

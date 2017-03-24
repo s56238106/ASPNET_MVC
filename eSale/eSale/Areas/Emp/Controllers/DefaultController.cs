@@ -11,8 +11,11 @@ namespace eSale.Areas.Emp.Controllers
         // GET: Emp/Default
         public ActionResult Index()
         {
-            ViewBag.Desc = "Hello Emp";
-            return View();
+            //ViewBag.Desc = "Hello Emp";
+            //return View();
+            var result = new Models.Order() { CustId = "Gss", CustName = "叡揚資訊" };
+
+            return this.Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

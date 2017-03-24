@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace eSale.Controllers
 {
-    public class LayoutController : Controller
+    public class LayoutTestController : Controller
     {
         // GET: Layout
         public ActionResult Index()
