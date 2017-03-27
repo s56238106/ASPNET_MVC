@@ -15,6 +15,7 @@ namespace Layer.Controllers
             var data=orderService.GetOrderById("1");
             ViewBag.data = data.CustId + " . " + data.CustName + " . " + data.OrderId;
             return View();
+
         }
     }
 }
