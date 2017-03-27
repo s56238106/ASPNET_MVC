@@ -16,6 +16,7 @@ namespace Layer.Controllers
             ViewBag.data = data.CustId + " . " + data.CustName + " . " + data.OrderId;
             return View();
 
+
         }
     }
 }
