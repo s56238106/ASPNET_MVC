@@ -8,10 +8,24 @@ namespace eSale.Models
 {
     public class Order
     {
+
+        /// <summary>
+        /// 建構式
+        /// </summary>
+        public Order()
+        {
+            var ods = new List<Models.OrderDetails>();
+            ods.Add(new OrderDetails() { ProductId = 58 });
+            this.OrderDetails = ods;
+
+        }
+
+
+
         /// <summary>
         /// 訂單編號
         /// </summary>
-        public int OrderDd { get; set; }
+        public int OrderId { get; set; }
 
         /// <summary>
         /// 客戶代號
