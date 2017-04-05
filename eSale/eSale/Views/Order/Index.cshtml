@@ -16,6 +16,7 @@
         <div>@Html.TextBox("txtOrderId")</div>
 
         @Html.DropDownList("custData", (List<SelectListItem>)ViewBag.custData);
+      
 
 
         <table>
@@ -24,14 +25,14 @@
                 <td>客戶名稱</td>
                 <td>負責員工</td>
             </tr>
-            @*@foreach (var item in (List<eSale.Models.Order>)ViewBag.data)
+            @foreach (var item in (List<eSale.Models.Order>)ViewBag.data)
             {
                 <tr>
-                    <td>@item.CustId</td>
+                    <td>@item.CustomerID</td>
                     <td>@item.CustName</td>
                     <td>@item.EmpName</td>
                 </tr>
-            }*@
+            }
         </table>
 
 

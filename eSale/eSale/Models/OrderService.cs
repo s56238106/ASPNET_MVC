@@ -18,7 +18,7 @@ namespace eSale.Models
 		/// <returns></returns>
         private string GetDBConnectionString()
         {
-            return System.Configuration.ConfigurationManager.ConnectionStrings["DBConn"].ConnectionString.ToString();
+            return System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString.ToString();
         }
 
 
@@ -52,16 +52,16 @@ namespace eSale.Models
         {
             DataTable dt = new DataTable();
 			string sql = @"SELECT 
-					A.OrderId,A.CustomerID,B.Companyname As CustName,
-					A.EmployeeID,C.lastname+ C.firstname As EmpName,
-					A.Orderdate,A.RequireDdate,A.ShippedDate,
-					A.ShipperId,D.companyname As ShipperName,A.Freight,
+					A.OrderID,A.CustomerID,B.CompanyName As CustName,
+					A.EmployeeID,C.LastName+ C.FirstName As EmpName,
+					A.OrderDate,A.RequiredDate,A.ShippedDate,
+					A.ShipperID,D.CompanyName As ShipperName,A.Freight,
 					A.ShipName,A.ShipAddress,A.ShipCity,A.ShipRegion,A.ShipPostalCode,A.ShipCountry
 					From Sales.Orders As A 
 					INNER JOIN Sales.Customers As B ON A.CustomerID=B.CustomerID
 					INNER JOIN HR.Employees As C On A.EmployeeID=C.EmployeeID
-					inner JOIN Sales.Shippers As D ON A.shipperid=D.shipperid
-					Where  A.OrderId=@OrderId";
+					INNER JOIN Sales.Shippers As D ON A.ShipperID=D.ShipperID
+					Where  A.OrderID=@OrderId";
 
 
 			using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
@@ -88,7 +88,7 @@ namespace eSale.Models
             DataTable dt = new DataTable();
             string sql = @"SELECT 
 					A.OrderId,A.CustId,B.Companyname As CustName,
-					A.EmpId,C.lastname+ C.firstname As EmpName,
+					A.EmployeeID,C.lastname+ C.firstname As EmpName,
 					A.Orderdate,A.RequireDdate,A.ShippedDate,
 					A.ShipperId,D.companyname As ShipperName,A.Freight,
 					A.ShipName,A.ShipAddress,A.ShipCity,A.ShipRegion,A.ShipPostalCode,A.ShipCountry
@@ -125,23 +125,24 @@ namespace eSale.Models
             {
                 result.Add(new Order()
                 {
-                    CustId = row["CustId"].ToString(),
+                    OrderID = (int)row["OrderID"],
+                    CustomerID = (int)row["CustomerID"],
                     CustName = row["CustName"].ToString(),
-                    EmpId = (int)row["EmpId"],
+                    EmployeeID = (int)row["EmployeeID"],
                     EmpName = row["EmpName"].ToString(),
-                    Freight = (double)row["Freight"],
-                    Orderdate = row["Orderdate"] == DBNull.Value ? (DateTime?)null : (DateTime)row["Orderdate"],
-                    OrderId = (int)row["OrderId"],
-                    RequireDdate = row["RequireDdate"] == DBNull.Value ? (DateTime?)null : (DateTime)row["RequireDdate"],
+                    OrderDate = row["OrderDate"] == DBNull.Value ? (DateTime?)null : (DateTime)row["OrderDate"],
+                    RequiredDate = row["RequiredDate"] == DBNull.Value ? (DateTime?)null : (DateTime)row["RequiredDate"],
+                    ShippedDate = row["ShippedDate"] == DBNull.Value ? (DateTime?)null : (DateTime)row["ShippedDate"],
+                    ShipperID = (int)row["ShipperID"],
+                    ShipperName = row["ShipperName"].ToString(),
+                    Freight = (decimal)row["Freight"],
+                    ShipName = row["ShipName"].ToString(),
                     ShipAddress = row["ShipAddress"].ToString(),
                     ShipCity = row["ShipCity"].ToString(),
-                    ShipCountry = row["ShipCountry"].ToString(),
-                    ShipName = row["ShipName"].ToString(),
-                    ShippedDate = row["ShippedDate"] == DBNull.Value ? (DateTime?)null : (DateTime)row["ShippedDate"],
-                    ShipperId = (int)row["ShipperId"],
-                    ShipperName = row["ShipperName"].ToString(),
+                    ShipRegion = row["ShipRegion"].ToString(),
                     ShipPostalCode = row["ShipPostalCode"].ToString(),
-                    ShipRegion = row["ShipRegion"].ToString()
+                    ShipCountry = row["ShipCountry"].ToString()
+
                 });
             }
             return result;
@@ -153,13 +154,13 @@ namespace eSale.Models
         /// 取得訂單
         /// </summary>
         /// <returns></returns>
-        public List<Models.Order> GetOrders()
-        {
-            List<Models.Order> result = new List<Order>();
-            result.Add(new Order() { CustId = "GSS", CustName = "叡揚資訊", EmpId = 1, EmpName = "水母白" });
-            result.Add(new Order() { CustId = "KUAS", CustName = "高應大", EmpId = 2, EmpName = "幾米白" });
-            return result;
-        }
+        //public List<Models.Order> GetOrders()
+        //{
+        //    List<Models.Order> result = new List<Order>();
+        //    result.Add(new Order() { CustId = "GSS", CustName = "叡揚資訊", EmpId = 1, EmpName = "水母白" });
+        //    result.Add(new Order() { CustId = "KUAS", CustName = "高應大", EmpId = 2, EmpName = "幾米白" });
+        //    return result;
+        //}
 
 
 

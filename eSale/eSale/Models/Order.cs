@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace eSale.Models
 {
@@ -25,12 +27,12 @@ namespace eSale.Models
         /// <summary>
         /// 訂單編號
         /// </summary>
-        public int OrderId { get; set; }
+        public int OrderID { get; set; }
 
         /// <summary>
         /// 客戶代號
         /// </summary>
-        public string CustId { get; set; }
+        public int CustomerID { get; set; }
 
         /// <summary>
         /// 客戶名稱
@@ -40,7 +42,7 @@ namespace eSale.Models
         /// <summary>
         /// 業務(員工)代號
         /// </summary>
-        public int EmpId { get; set; }
+        public int EmployeeID { get; set; }
 
         /// <summary>
         /// 業務(員工姓名)
@@ -50,12 +52,12 @@ namespace eSale.Models
         /// <summary>
         /// 訂單日期
         /// </summary>
-        public DateTime? Orderdate { get; set; }
+        public DateTime? OrderDate { get; set; }
 
         /// <summary>
         /// 需要日期
         /// </summary>
-        public DateTime? RequireDdate { get; set; }
+        public DateTime? RequiredDate { get; set; }
 
         /// <summary>
         /// 出貨日期
@@ -65,17 +67,17 @@ namespace eSale.Models
         /// <summary>
         /// 出貨公司代號
         /// </summary>
-        public int ShipperId { get; set; }
+        public int ShipperID { get; set; }
 
         /// <summary>
         /// 出貨公司名稱
         /// </summary>
-        public int ShipperName { get; set; }
+        public string ShipperName { get; set; }
 
         /// <summary>
         /// 運費
         /// </summary>
-        public double Freight { get; set; }
+        public decimal Freight { get; set; }
 
         /// <summary>
         /// 出貨說明
@@ -106,5 +108,10 @@ namespace eSale.Models
         /// 出貨國家
         /// </summary>
         public string ShipCountry { get; set; }
+
+        /// <summary>
+        /// 訂單明細
+        /// </summary>
+        public List<OrderDetails> OrderDetails { get; set; }
     }
 }
