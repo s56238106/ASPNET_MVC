@@ -48,7 +48,7 @@ namespace eSale.Models
         /// </summary>
         /// <param name="id">訂單ID</param>
         /// <returns></returns>
-        public Models.Order GetOrderById(string OrderId)
+        public List<Models.Order> GetOrderById(string OrderId)
         {
             DataTable dt = new DataTable();
 			string sql = @"SELECT 
@@ -69,12 +69,11 @@ namespace eSale.Models
 				conn.Open();
 				SqlCommand cmd = new SqlCommand(sql, conn);
 				cmd.Parameters.Add(new SqlParameter("@OrderId", OrderId));
-				
 				SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
 				sqlAdapter.Fill(dt);
 				conn.Close();
 			}
-			return this.MapOrderDataToList(dt).FirstOrDefault();
+			return this.MapOrderDataToList(dt);
 
         }
 
@@ -119,8 +118,6 @@ namespace eSale.Models
         private List<Models.Order> MapOrderDataToList(DataTable orderData)
         {
             List<Models.Order> result = new List<Order>();
-
-
             foreach (DataRow row in orderData.Rows)
             {
                 result.Add(new Order()
@@ -142,7 +139,6 @@ namespace eSale.Models
                     ShipRegion = row["ShipRegion"].ToString(),
                     ShipPostalCode = row["ShipPostalCode"].ToString(),
                     ShipCountry = row["ShipCountry"].ToString()
-
                 });
             }
             return result;
