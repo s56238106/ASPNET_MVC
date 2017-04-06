@@ -11,31 +11,65 @@ namespace eSale.Controllers
         // GET: Order
         public ActionResult Index()
         {
+            ///取得所有訂單
             Models.OrderService orderService = new Models.OrderService();
-            ViewBag.data = orderService.GetOrderById("10250");
+            ViewBag.data = orderService.GetOrderById();
 
-            List<SelectListItem> custData = new List<SelectListItem>();
-            custData.Add(new SelectListItem()
+            ///取得員工姓名,ID
+            Models.OrderService emp = new Models.OrderService();
+            List<Models.Order> empname = emp.GetEmpName();
+            List<SelectListItem> EmpData = new List<SelectListItem>();
+            EmpData.Add(new SelectListItem());
+            foreach (var item in empname)
             {
-                Text = "叡揚資訊",
-                Value = "1"
-            });
-            custData.Add(new SelectListItem()
-            {
-                Text = "高應資訊",
-                Value = "2"
-            });
+                EmpData.Add(new SelectListItem()
+                            {
+                                Text = item.EmpName,
+                                Value= item.EmployeeID.ToString()
+                            });
+            }
+            ViewBag.EmpData = EmpData;
 
-            ViewBag.custData = custData;
+            ///取得公司名稱
+            Models.OrderService com = new Models.OrderService();
+            List<Models.Order> comdata = com.GetComName();
+            List<SelectListItem> ComData = new List<SelectListItem>();
+            ComData.Add(new SelectListItem());
+            foreach (var item in comdata)
+            {
+                ComData.Add(new SelectListItem()
+                {
+                    Text=item.ShipName
+                });
+            }
+            ViewBag.ComData = ComData;
+
             return View();
         }
+
+        /// <summary>
+        /// 條件查詢訂單
+        /// </summary>
+        /// <param name="OrderID"></param>
+        /// <param name="CustomerName"></param>
+        /// <param name="EmployeeName"></param>
+        /// <param name="CompanyName"></param>
+        /// <param name="OrderDate"></param>
+        /// <param name="ShipperDate"></param>
+        /// <param name="RequiredDate"></param>
+        /// <returns></returns>
+        public ActionResult search(String OrderID = "", string CustomerName = "", string EmployeeName = "", string CompanyName = "", string OrderDate = "", string ShipperDate = "", string RequiredDate = "")
+        {
+
+            return View();
+        }
+
+
 
         /// <summary>
         /// 新增訂單畫面
         /// </summary>
         /// <returns></returns>
-
-
         public ActionResult InsertOrder()
         {
             return View();
@@ -60,25 +94,7 @@ namespace eSale.Controllers
             /// return View("index");
         }
 
-        //[HttpGet]
-        //public JsonResult TestJson()
-        //{
-
-        //    ///var result = new Models.Order();
-        //    ///result.CustId = "GSS";
-        //    ///result.CustName = "叡揚資訊";
-
-        //    /// var result = new Models.Order() { CustId = "Gss", CustName = "叡揚資訊" };
-
-        //    /// return this.Json(result, JsonRequestBehavior.AllowGet);
-        //}
-
-        //[HttpGet]
-        //public JsonResult TestJson2()
-        //{
-        //    ///   var redult = new Models.Order() { CustId = "0000", CustName = "5566" };
-        //    ///   return this.Json(redult, JsonRequestBehavior.AllowGet);
-        //}
+        
 
     }
 }

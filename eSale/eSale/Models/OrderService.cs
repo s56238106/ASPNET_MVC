@@ -18,7 +18,7 @@ namespace eSale.Models
 		/// <returns></returns>
         private string GetDBConnectionString()
         {
-            return System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString.ToString();
+            return System.Configuration.ConfigurationManager.ConnectionStrings["DBconnect"].ConnectionString.ToString();
         }
 
 
@@ -44,11 +44,11 @@ namespace eSale.Models
 
         }
         /// <summary>
-        /// 取得訂單
+        /// 取得全部訂單
         /// </summary>
         /// <param name="id">訂單ID</param>
         /// <returns></returns>
-        public List<Models.Order> GetOrderById(string OrderId)
+        public List<Models.Order> GetOrderById()
         {
             DataTable dt = new DataTable();
 			string sql = @"SELECT 
@@ -61,14 +61,15 @@ namespace eSale.Models
 					INNER JOIN Sales.Customers As B ON A.CustomerID=B.CustomerID
 					INNER JOIN HR.Employees As C On A.EmployeeID=C.EmployeeID
 					INNER JOIN Sales.Shippers As D ON A.ShipperID=D.ShipperID
-					Where  A.OrderID=@OrderId";
+                    Order by CustomerID 
+					";
 
 
 			using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
 			{
 				conn.Open();
 				SqlCommand cmd = new SqlCommand(sql, conn);
-				cmd.Parameters.Add(new SqlParameter("@OrderId", OrderId));
+				
 				SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
 				sqlAdapter.Fill(dt);
 				conn.Close();
@@ -81,7 +82,7 @@ namespace eSale.Models
 		/// 依照條件取得訂單資料
 		/// </summary>
 		/// <returns></returns>
-		public List<Models.Order> GetOrderByCondtioin(Models.OrderSearchArg arg)
+		public List<Models.Order> GetOrderByConditioin(Models.OrderSearchArg arg)
         {
 
             DataTable dt = new DataTable();
@@ -144,20 +145,62 @@ namespace eSale.Models
             return result;
         }
 
-
-
         /// <summary>
-        /// 取得訂單
+        /// 取得所有員工姓名
         /// </summary>
         /// <returns></returns>
-        //public List<Models.Order> GetOrders()
-        //{
-        //    List<Models.Order> result = new List<Order>();
-        //    result.Add(new Order() { CustId = "GSS", CustName = "叡揚資訊", EmpId = 1, EmpName = "水母白" });
-        //    result.Add(new Order() { CustId = "KUAS", CustName = "高應大", EmpId = 2, EmpName = "幾米白" });
-        //    return result;
-        //}
+        public List<Models.Order> GetEmpName()
+        {
+            DataTable dt = new DataTable();
+            string sql = @"SELECT 
+                           EmployeeID,(FirstName+' '+LastName) as name
+                           FROM HR.Employees";
+            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
+                sqlAdapter.Fill(dt);
+                conn.Close();
+            }
 
+            List<Models.Order> result = new List<Order>();
+            foreach (DataRow row in dt.Rows)
+            {
+                result.Add(new Order()
+                {
+                    EmpName = row["name"].ToString(),
+                    EmployeeID=(int)row["EmployeeID"]
+                });
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 取得公司名稱
+        /// </summary>
+        /// <returns></returns>
+        public List<Models.Order> GetComName()
+        {
+            DataTable dt = new DataTable();
+            string sql = @"SELECT CompanyName
+                           FROM Sales.Shippers";
+            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
+                sqlAdapter.Fill(dt);
+                conn.Close();
+            }
+            List<Models.Order> result = new List<Order>();
+            foreach (DataRow row in dt.Rows)
+            {
+                result.Add(new Order() { ShipName = row["CompanyName"].ToString()
+                });
+            }
+            return result;
+        }
 
 
     }
