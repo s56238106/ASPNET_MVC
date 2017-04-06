@@ -8,12 +8,12 @@ namespace eSale.Controllers
 {
     public class OrderController : Controller
     {
-        // GET: Order
-        public ActionResult Index()
+        
+        public ActionResult Index(Models.OrderSearchArg arg)
         {
-            ///取得所有訂單
+            ///取得條件訂單
             Models.OrderService orderService = new Models.OrderService();
-            ViewBag.data = orderService.GetOrderById();
+            ViewBag.data = orderService.GetOrderById(arg);
 
             ///取得員工姓名,ID
             Models.OrderService emp = new Models.OrderService();
@@ -44,22 +44,7 @@ namespace eSale.Controllers
             }
             ViewBag.ComData = ComData;
 
-            return View();
-        }
 
-        /// <summary>
-        /// 條件查詢訂單
-        /// </summary>
-        /// <param name="OrderID"></param>
-        /// <param name="CustomerName"></param>
-        /// <param name="EmployeeName"></param>
-        /// <param name="CompanyName"></param>
-        /// <param name="OrderDate"></param>
-        /// <param name="ShipperDate"></param>
-        /// <param name="RequiredDate"></param>
-        /// <returns></returns>
-        public ActionResult search(String OrderID = "", string CustomerName = "", string EmployeeName = "", string CompanyName = "", string OrderDate = "", string ShipperDate = "", string RequiredDate = "")
-        {
 
             return View();
         }

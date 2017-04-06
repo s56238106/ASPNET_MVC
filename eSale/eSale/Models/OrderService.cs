@@ -44,33 +44,40 @@ namespace eSale.Models
 
         }
         /// <summary>
-        /// 取得全部訂單
+        /// 取得條件訂單
         /// </summary>
-        /// <param name="id">訂單ID</param>
         /// <returns></returns>
-        public List<Models.Order> GetOrderById()
+        public List<Models.Order> GetOrderById(Models.OrderSearchArg arg)
         {
             DataTable dt = new DataTable();
 			string sql = @"SELECT 
-					A.OrderID,A.CustomerID,B.CompanyName As CustName,
-					A.EmployeeID,C.LastName+ C.FirstName As EmpName,
-					A.OrderDate,A.RequiredDate,A.ShippedDate,
-					A.ShipperID,D.CompanyName As ShipperName,A.Freight,
-					A.ShipName,A.ShipAddress,A.ShipCity,A.ShipRegion,A.ShipPostalCode,A.ShipCountry
+					A.OrderID,B.CompanyName As CustomerName,
+					CONVERT(varchar(10),A.OrderDate,111) as OrderDate,CONVERT(varchar(10),A.ShippedDate,111) as ShippedDate
 					From Sales.Orders As A 
 					INNER JOIN Sales.Customers As B ON A.CustomerID=B.CustomerID
 					INNER JOIN HR.Employees As C On A.EmployeeID=C.EmployeeID
 					INNER JOIN Sales.Shippers As D ON A.ShipperID=D.ShipperID
-                    Order by CustomerID 
-					";
+                    Where (A.OrderID=@OrderID Or @OrderID='') And 
+						  (B.CompanyName Like @CustomerName Or @CustomerName='') And
+                          (C.EmployeeID=@EmployeeID Or @EmployeeID='') And
+                          (D.CompanyName=@CompanyName Or @CompanyName='') And
+                          (A.OrderDate=@OrderDate Or @OrderDate='') And
+                          (A.ShippedDate=@ShippedDate Or @ShippedDate='') And
+                          (A.RequiredDate=@RequiredDate Or @RequiredDate='') ";
 
 
 			using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
 			{
 				conn.Open();
 				SqlCommand cmd = new SqlCommand(sql, conn);
-				
-				SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
+                cmd.Parameters.Add(new SqlParameter("@OrderID", arg.OrderID == null ? string.Empty : arg.OrderID));
+                cmd.Parameters.Add(new SqlParameter("@CustomerName", arg.CustomerName == null ? string.Empty : '%'+arg.CustomerName+'%'));
+                cmd.Parameters.Add(new SqlParameter("@EmployeeID", arg.EmployeeID == null ? string.Empty : arg.EmployeeID));
+                cmd.Parameters.Add(new SqlParameter("@CompanyName", arg.CompanyName == null ? string.Empty : arg.CompanyName));
+                cmd.Parameters.Add(new SqlParameter("@OrderDate", arg.OrderDate == null ? string.Empty : arg.OrderDate));
+                cmd.Parameters.Add(new SqlParameter("@ShippedDate", arg.ShippedDate == null ? string.Empty : arg.ShippedDate));
+                cmd.Parameters.Add(new SqlParameter("@RequiredDate", arg.RequiredDate == null ? string.Empty : arg.RequiredDate));
+                SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
 				sqlAdapter.Fill(dt);
 				conn.Close();
 			}
@@ -79,43 +86,10 @@ namespace eSale.Models
         }
 
         /// <summary>
-		/// 依照條件取得訂單資料
-		/// </summary>
-		/// <returns></returns>
-		public List<Models.Order> GetOrderByConditioin(Models.OrderSearchArg arg)
-        {
-
-            DataTable dt = new DataTable();
-            string sql = @"SELECT 
-					A.OrderId,A.CustId,B.Companyname As CustName,
-					A.EmployeeID,C.lastname+ C.firstname As EmpName,
-					A.Orderdate,A.RequireDdate,A.ShippedDate,
-					A.ShipperId,D.companyname As ShipperName,A.Freight,
-					A.ShipName,A.ShipAddress,A.ShipCity,A.ShipRegion,A.ShipPostalCode,A.ShipCountry
-					From Sales.Orders As A 
-					INNER JOIN Sales.Customers As B ON A.custid=B.custid
-					INNER JOIN HR.Employees As C On A.empid=C.empid
-					inner JOIN Sales.Shippers As D ON A.shipperid=D.shipperid
-					Where (B.Companyname Like @CustName Or @CustName='') And 
-						  (A.Orderdate=@Orderdate Or @Orderdate='') ";
-
-
-            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.Add(new SqlParameter("@CustName", arg.CustName == null ? string.Empty : arg.CustName));
-                cmd.Parameters.Add(new SqlParameter("@Orderdate", arg.OrderDate == null ? string.Empty : arg.OrderDate));
-                SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
-                sqlAdapter.Fill(dt);
-                conn.Close();
-            }
-
-
-            return this.MapOrderDataToList(dt);
-        }
-
-
+        /// SQL資料整理
+        /// </summary>
+        /// <param name="orderData"></param>
+        /// <returns></returns>
         private List<Models.Order> MapOrderDataToList(DataTable orderData)
         {
             List<Models.Order> result = new List<Order>();
@@ -123,23 +97,23 @@ namespace eSale.Models
             {
                 result.Add(new Order()
                 {
-                    OrderID = (int)row["OrderID"],
-                    CustomerID = (int)row["CustomerID"],
-                    CustName = row["CustName"].ToString(),
-                    EmployeeID = (int)row["EmployeeID"],
-                    EmpName = row["EmpName"].ToString(),
-                    OrderDate = row["OrderDate"] == DBNull.Value ? (DateTime?)null : (DateTime)row["OrderDate"],
-                    RequiredDate = row["RequiredDate"] == DBNull.Value ? (DateTime?)null : (DateTime)row["RequiredDate"],
-                    ShippedDate = row["ShippedDate"] == DBNull.Value ? (DateTime?)null : (DateTime)row["ShippedDate"],
-                    ShipperID = (int)row["ShipperID"],
-                    ShipperName = row["ShipperName"].ToString(),
-                    Freight = (decimal)row["Freight"],
-                    ShipName = row["ShipName"].ToString(),
-                    ShipAddress = row["ShipAddress"].ToString(),
-                    ShipCity = row["ShipCity"].ToString(),
-                    ShipRegion = row["ShipRegion"].ToString(),
-                    ShipPostalCode = row["ShipPostalCode"].ToString(),
-                    ShipCountry = row["ShipCountry"].ToString()
+                    OrderID = row["OrderID"].ToString(),
+                 ///   CustomerID = (int)row["CustomerID"],
+                    CustName = row["CustomerName"].ToString(),
+                 ///   EmployeeID = (int)row["EmployeeID"],
+                 ///   EmpName = row["EmpName"].ToString(),
+                    OrderDate = row["OrderDate"].ToString(),
+                 ///   RequiredDate = row["RequiredDate"] == DBNull.Value ? (DateTime?)null : (DateTime)row["RequiredDate"],
+                    ShippedDate = row["ShippedDate"].ToString(),
+                 ///   ShipperID = (int)row["ShipperID"],
+                 ///   ShipperName = row["ShipperName"].ToString(),
+                 ///   Freight = (decimal)row["Freight"],
+                 ///   ShipName = row["ShipName"].ToString(),
+                 ///   ShipAddress = row["ShipAddress"].ToString(),
+                 ///   ShipCity = row["ShipCity"].ToString(),
+                 ///   ShipRegion = row["ShipRegion"].ToString(),
+                 ///   ShipPostalCode = row["ShipPostalCode"].ToString(),
+                 ///   ShipCountry = row["ShipCountry"].ToString()
                 });
             }
             return result;
@@ -170,7 +144,7 @@ namespace eSale.Models
                 result.Add(new Order()
                 {
                     EmpName = row["name"].ToString(),
-                    EmployeeID=(int)row["EmployeeID"]
+                    EmployeeID=row["EmployeeID"].ToString()
                 });
             }
             return result;

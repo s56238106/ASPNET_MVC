@@ -27,12 +27,12 @@ namespace eSale.Models
         /// <summary>
         /// 訂單編號
         /// </summary>
-        public int OrderID { get; set; }
+        public string OrderID { get; set; }
 
         /// <summary>
         /// 客戶代號
         /// </summary>
-        public int CustomerID { get; set; }
+        public string CustomerID { get; set; }
 
         /// <summary>
         /// 客戶名稱
@@ -42,7 +42,7 @@ namespace eSale.Models
         /// <summary>
         /// 業務(員工)代號
         /// </summary>
-        public int EmployeeID { get; set; }
+        public string EmployeeID { get; set; }
 
         /// <summary>
         /// 業務(員工姓名)
@@ -52,7 +52,7 @@ namespace eSale.Models
         /// <summary>
         /// 訂單日期
         /// </summary>
-        public DateTime? OrderDate { get; set; }
+        public string OrderDate { get; set; }
 
         /// <summary>
         /// 需要日期
@@ -62,7 +62,7 @@ namespace eSale.Models
         /// <summary>
         /// 出貨日期
         /// </summary>
-        public DateTime? ShippedDate { get; set; }
+        public string ShippedDate { get; set; }
 
         /// <summary>
         /// 出貨公司代號
