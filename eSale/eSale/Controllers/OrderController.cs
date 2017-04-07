@@ -43,9 +43,6 @@ namespace eSale.Controllers
                 });
             }
             ViewBag.ComData = ComData;
-
-
-
             return View();
         }
 

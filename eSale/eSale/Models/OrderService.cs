@@ -65,18 +65,23 @@ namespace eSale.Models
                           (A.ShippedDate=@ShippedDate Or @ShippedDate='') And
                           (A.RequiredDate=@RequiredDate Or @RequiredDate='') ";
 
-
 			using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
 			{
 				conn.Open();
 				SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.Add(new SqlParameter("@OrderID", arg.OrderID == null ? string.Empty : arg.OrderID));
+                if (arg.OrderID!=string.Empty)
+                {
+                    cmd.Parameters.Add(new SqlParameter("@OrderID",arg.OrderID));
+                    
+                }
+
                 cmd.Parameters.Add(new SqlParameter("@CustomerName", arg.CustomerName == null ? string.Empty : '%'+arg.CustomerName+'%'));
                 cmd.Parameters.Add(new SqlParameter("@EmployeeID", arg.EmployeeID == null ? string.Empty : arg.EmployeeID));
                 cmd.Parameters.Add(new SqlParameter("@CompanyName", arg.CompanyName == null ? string.Empty : arg.CompanyName));
                 cmd.Parameters.Add(new SqlParameter("@OrderDate", arg.OrderDate == null ? string.Empty : arg.OrderDate));
                 cmd.Parameters.Add(new SqlParameter("@ShippedDate", arg.ShippedDate == null ? string.Empty : arg.ShippedDate));
                 cmd.Parameters.Add(new SqlParameter("@RequiredDate", arg.RequiredDate == null ? string.Empty : arg.RequiredDate));
+
                 SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
 				sqlAdapter.Fill(dt);
 				conn.Close();
@@ -103,7 +108,7 @@ namespace eSale.Models
                  ///   EmployeeID = (int)row["EmployeeID"],
                  ///   EmpName = row["EmpName"].ToString(),
                     OrderDate = row["OrderDate"].ToString(),
-                 ///   RequiredDate = row["RequiredDate"] == DBNull.Value ? (DateTime?)null : (DateTime)row["RequiredDate"],
+                 ///RequiredDate = row["RequiredDate"] == DBNull.Value ? (DateTime?)null : (DateTime)row["RequiredDate"],
                     ShippedDate = row["ShippedDate"].ToString(),
                  ///   ShipperID = (int)row["ShipperID"],
                  ///   ShipperName = row["ShipperName"].ToString(),
