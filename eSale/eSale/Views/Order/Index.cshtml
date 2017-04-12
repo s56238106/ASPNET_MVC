@@ -10,9 +10,9 @@
         @using (Html.BeginForm("Index", "Order",FormMethod.Get,new { id="form1"})) {
             <table class="table table-striped">
                 <tr><td>訂單編號</td><td>@Html.TextBoxFor(model => model.OrderID)</td></tr>
-                <tr><td>客戶名稱</td><td>@Html.TextBox("CustomerName")</td></tr>
+                <tr><td>客戶名稱</td><td>@Html.TextBoxFor(model=>model.CustomerName,(List<SelectListItem>)ViewBag.CustData)</td></tr>
                 <tr><td>負責員工</td><td>@Html.DropDownListFor(model => model.EmployeeID, (List<SelectListItem>)ViewBag.EmpData)</td></tr>
-                <tr><td>出貨公司</td><td>@Html.DropDownListFor(Model => Model.CompanyName,(List<SelectListItem>)ViewBag.ComData)</td></tr>
+                <tr><td>出貨公司</td><td>@Html.DropDownListFor(Model => Model.ShipperID,(List<SelectListItem>)ViewBag.ComData)</td></tr>
                 <tr><td>訂購日期</td><td>@Html.TextBoxFor(model => model.OrderDate, new { @type = "date" })</td></tr>
                 <tr><td>出貨日期</td><td>@Html.TextBoxFor(model => model.ShippedDate, new { @type = "date" })</td></tr>
                 <tr><td>需要日期</td><td>@Html.TextBoxFor(model => model.RequiredDate, new { @type = "date" })</td>

@@ -44,7 +44,13 @@ namespace eSale.Controllers
             ///修改_取得ID條件訂單
             Models.OrderService orderService = new Models.OrderService();
             ViewBag.data = orderService.GetOrderById(Id);
-            return View();
+            ///取得客戶名稱
+            Models.CodeService com = new Models.CodeService();
+            ViewBag.CustData = com.GetCustomer();
+            ///取得員工姓名,ID
+            Models.CodeService emp = new Models.CodeService();
+            ViewBag.EmpData = emp.GetEmpName();
+            return View(ViewBag.data);
         }
 
 

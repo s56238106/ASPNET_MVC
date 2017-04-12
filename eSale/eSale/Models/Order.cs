@@ -57,7 +57,7 @@ namespace eSale.Models
         /// <summary>
         /// 需要日期
         /// </summary>
-        public DateTime? RequiredDate { get; set; }
+        public string RequiredDate { get; set; }
 
         /// <summary>
         /// 出貨日期
@@ -70,11 +70,6 @@ namespace eSale.Models
         public int ShipperID { get; set; }
 
         /// <summary>
-        /// 出貨說明
-        /// </summary>
-        public string ShipperName { get; set; }
-
-        /// <summary>
         /// 出貨公司名稱
         /// </summary>
         public string CompanyName { get; set; }
@@ -82,7 +77,7 @@ namespace eSale.Models
         /// <summary>
         /// 運費
         /// </summary>
-        public decimal Freight { get; set; }
+        public string Freight { get; set; }
 
         /// <summary>
         /// 出貨說明

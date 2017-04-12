@@ -77,12 +77,44 @@ namespace eSale.Models
                 result.Add(new SelectListItem()
                 {
                     Text = row["CompanyName"].ToString(),
-                    Value = row["CompanyName"].ToString()
+                    Value = row["ShipperID"].ToString()
                 });
             }
             return result;
         }
 
+
+        /// <summary>
+        /// 取得客戶資料
+        /// </summary>
+        /// <returns></returns>
+        public List<SelectListItem> GetCustomer()
+        {
+            DataTable dt = new DataTable();
+            string sql = @"Select CustomerID,CompanyName As CustName FROM Sales.Customers";
+            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
+                sqlAdapter.Fill(dt);
+                conn.Close();
+            }
+            List<SelectListItem> result = new List<SelectListItem>();
+            result.Add(new SelectListItem());
+            foreach (DataRow row in dt.Rows)
+            {
+                result.Add(new SelectListItem());
+                result.Add(new SelectListItem()
+                {
+                    Text = row["CustName"].ToString(),
+                    Value = row["CustomerID"].ToString()
+                });
+            }
+
+
+            return result;
+        }
 
     }
 }

@@ -51,12 +51,17 @@ namespace eSale.Models
         /// 修改_取得ID條件訂單
         /// </summary>
         /// <returns></returns>
-        public List<Models.Order> GetOrderById(string Id)
+        public Models.Order GetOrderById(string Id)
         {
             DataTable dt = new DataTable();
             string sql = @"SELECT 
-					A.OrderID,B.CompanyName As CustomerName,
-					CONVERT(varchar(10),A.OrderDate,111) as OrderDate,CONVERT(varchar(10),A.ShippedDate,111) as ShippedDate,D.CompanyName
+					A.OrderID,
+                    B.CompanyName As CustomerName,
+                    (FirstName+' '+LastName) as EmpName,
+					CONVERT(varchar(10),A.OrderDate,111) as OrderDate,
+                    CONVERT(varchar(10),A.RequiredDate,111) as RequiredDate,
+                    CONVERT(varchar(10),A.ShippedDate,111) as ShippedDate,
+                    D.CompanyName,A.Freight,A.ShipCountry,A.ShipCity,A.ShipRegion,A.ShipPostalCode,A.ShipAddress,A.ShipName
 
 					From Sales.Orders As A 
 					INNER JOIN Sales.Customers As B ON A.CustomerID=B.CustomerID
@@ -74,7 +79,29 @@ namespace eSale.Models
                 sqlAdapter.Fill(dt);
                 conn.Close();
             }
-            return this.MapOrderDataToList(dt);
+            Models.Order result = new Models.Order();
+
+            foreach (DataRow item in dt.Rows)
+            {
+                result.OrderID = item["OrderID"].ToString();
+                result.CustName = item["CustomerName"].ToString();
+                result.EmpName = item["EmpName"].ToString();
+                result.OrderDate = item["OrderDate"].ToString();
+                result.RequiredDate = item["RequiredDate"].ToString();
+                result.ShippedDate = item["ShippedDate"].ToString();
+                result.CompanyName = item["CompanyName"].ToString();
+                result.Freight = item["Freight"].ToString();
+                result.ShipCountry = item["ShipCountry"].ToString();
+                result.ShipCity = item["ShipCity"].ToString();
+                result.ShipRegion = item["ShipRegion"].ToString();
+                result.ShipPostalCode = item["ShipPostalCode"].ToString();
+                result.ShipAddress = item["ShipAddress"].ToString();
+                result.ShipName = item["ShipName"].ToString();
+
+            }
+            
+
+            return result;
 
         }
 
@@ -115,7 +142,7 @@ namespace eSale.Models
                 cmd.Parameters.Add(new SqlParameter("@OrderID",arg.OrderID==null?string.Empty:arg.OrderID));
                 cmd.Parameters.Add(new SqlParameter("@CustomerName", arg.CustomerName == null ? string.Empty : '%'+arg.CustomerName+'%'));
                 cmd.Parameters.Add(new SqlParameter("@EmployeeID", arg.EmployeeID == null ? string.Empty : arg.EmployeeID));
-                cmd.Parameters.Add(new SqlParameter("@CompanyName", arg.CompanyName == null ? string.Empty : arg.CompanyName));
+                cmd.Parameters.Add(new SqlParameter("@CompanyName", arg.ShipperID == null ? string.Empty : arg.ShipperID));
                 cmd.Parameters.Add(new SqlParameter("@OrderDate", arg.OrderDate == null ? string.Empty : arg.OrderDate));
                 cmd.Parameters.Add(new SqlParameter("@ShippedDate", arg.ShippedDate == null ? string.Empty : arg.ShippedDate));
                 cmd.Parameters.Add(new SqlParameter("@RequiredDate", arg.RequiredDate == null ? string.Empty : arg.RequiredDate));
@@ -162,11 +189,5 @@ namespace eSale.Models
             }
             return result;
         }
-
-        
-
-       
-
-
     }
 }

@@ -1,18 +1,27 @@
-﻿
+﻿@model eSale.Models.Order
 @{
     ViewBag.Title = "UpdateOrder";
     Layout = "~/Views/_LayoutPage.cshtml";
 }
 
 <h2>UpdateOrder</h2>
-    <table>
-        <tr>
-            @((List<eSale.Models.Order>)ViewBag.data).
+    <table class="table table-striped">
+                
+                    <tr><td>訂單編號</td><td>@ViewBag.data.OrderID</td></tr>
+                    <tr><td>客戶名稱</td><td>@Html.DropDownListFor(model=>model.CustName,(List<SelectListItem>)ViewBag.CustData)</td></tr>
+                    <tr><td>負責員工名稱</td><td>@Html.DropDownListFor(model => model.EmpName, (List<SelectListItem>)ViewBag.EmpData)</td></tr>
+                    <tr><td>訂單日期</td><td>@ViewBag.data.OrderDate</td></tr>
+                    <tr><td>需要日期</td><td>@ViewBag.data.RequiredDate</td></tr>
+                    <tr><td>出貨日期</td><td>@ViewBag.data.ShippedDate</td></tr>
+                    <tr><td>出貨公司名稱</td><td>@ViewBag.data.CompanyName</td></tr>
+                    <tr><td>運費</td><td>@ViewBag.data.Freight</td></tr>
+                    <tr><td>出貨國家</td><td>@ViewBag.data.ShipCountry</td></tr>
+                    <tr><td>出貨城市</td><td>@ViewBag.data.ShipCity</td></tr>
+                    <tr><td>出貨地區</td><td>@ViewBag.data.ShipRegion</td></tr>
+                    <tr><td>郵遞區號</td><td>@ViewBag.data.ShipPostalCode</td></tr>
+                    <tr><td>出貨地址</td><td>@ViewBag.data.ShipAddress</td></tr>
+                    <tr><td>出貨說明</td><td>@ViewBag.data.ShipName</td></tr>
+                    <tr><td><input type="submit" /><input type="reset" /></td></tr>
 
-                @foreach (var item in (List<eSale.Models.Order>)ViewBag.data)
-            {
-                    <td>@item.OrderID</td>
-                }
-</tr>
     </table>
 
