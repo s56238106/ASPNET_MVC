@@ -52,7 +52,8 @@ namespace eSale.Models
             DataTable dt = new DataTable();
 			string sql = @"SELECT 
 					A.OrderID,B.CompanyName As CustomerName,
-					CONVERT(varchar(10),A.OrderDate,111) as OrderDate,CONVERT(varchar(10),A.ShippedDate,111) as ShippedDate
+					CONVERT(varchar(10),A.OrderDate,111) as OrderDate,CONVERT(varchar(10),A.ShippedDate,111) as ShippedDate,D.CompanyName
+
 					From Sales.Orders As A 
 					INNER JOIN Sales.Customers As B ON A.CustomerID=B.CustomerID
 					INNER JOIN HR.Employees As C On A.EmployeeID=C.EmployeeID
@@ -69,12 +70,8 @@ namespace eSale.Models
 			{
 				conn.Open();
 				SqlCommand cmd = new SqlCommand(sql, conn);
-                if (arg.OrderID!=string.Empty)
-                {
-                    cmd.Parameters.Add(new SqlParameter("@OrderID",arg.OrderID));
-                    
-                }
-
+                
+                cmd.Parameters.Add(new SqlParameter("@OrderID",arg.OrderID==null?string.Empty:arg.OrderID));
                 cmd.Parameters.Add(new SqlParameter("@CustomerName", arg.CustomerName == null ? string.Empty : '%'+arg.CustomerName+'%'));
                 cmd.Parameters.Add(new SqlParameter("@EmployeeID", arg.EmployeeID == null ? string.Empty : arg.EmployeeID));
                 cmd.Parameters.Add(new SqlParameter("@CompanyName", arg.CompanyName == null ? string.Empty : arg.CompanyName));
@@ -110,76 +107,24 @@ namespace eSale.Models
                     OrderDate = row["OrderDate"].ToString(),
                  ///RequiredDate = row["RequiredDate"] == DBNull.Value ? (DateTime?)null : (DateTime)row["RequiredDate"],
                     ShippedDate = row["ShippedDate"].ToString(),
-                 ///   ShipperID = (int)row["ShipperID"],
-                 ///   ShipperName = row["ShipperName"].ToString(),
-                 ///   Freight = (decimal)row["Freight"],
-                 ///   ShipName = row["ShipName"].ToString(),
-                 ///   ShipAddress = row["ShipAddress"].ToString(),
-                 ///   ShipCity = row["ShipCity"].ToString(),
-                 ///   ShipRegion = row["ShipRegion"].ToString(),
-                 ///   ShipPostalCode = row["ShipPostalCode"].ToString(),
-                 ///   ShipCountry = row["ShipCountry"].ToString()
+                    CompanyName=row["CompanyName"].ToString()
+                    ///   ShipperID = (int)row["ShipperID"],
+                    ///   ShipperName = row["ShipperName"].ToString(),
+                    ///   Freight = (decimal)row["Freight"],
+                    ///   ShipName = row["ShipName"].ToString(),
+                    ///   ShipAddress = row["ShipAddress"].ToString(),
+                    ///   ShipCity = row["ShipCity"].ToString(),
+                    ///   ShipRegion = row["ShipRegion"].ToString(),
+                    ///   ShipPostalCode = row["ShipPostalCode"].ToString(),
+                    ///   ShipCountry = row["ShipCountry"].ToString()
                 });
             }
             return result;
         }
 
-        /// <summary>
-        /// 取得所有員工姓名
-        /// </summary>
-        /// <returns></returns>
-        public List<Models.Order> GetEmpName()
-        {
-            DataTable dt = new DataTable();
-            string sql = @"SELECT 
-                           EmployeeID,(FirstName+' '+LastName) as name
-                           FROM HR.Employees";
-            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
-                sqlAdapter.Fill(dt);
-                conn.Close();
-            }
+        
 
-            List<Models.Order> result = new List<Order>();
-            foreach (DataRow row in dt.Rows)
-            {
-                result.Add(new Order()
-                {
-                    EmpName = row["name"].ToString(),
-                    EmployeeID=row["EmployeeID"].ToString()
-                });
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// 取得公司名稱
-        /// </summary>
-        /// <returns></returns>
-        public List<Models.Order> GetComName()
-        {
-            DataTable dt = new DataTable();
-            string sql = @"SELECT CompanyName
-                           FROM Sales.Shippers";
-            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
-                sqlAdapter.Fill(dt);
-                conn.Close();
-            }
-            List<Models.Order> result = new List<Order>();
-            foreach (DataRow row in dt.Rows)
-            {
-                result.Add(new Order() { ShipName = row["CompanyName"].ToString()
-                });
-            }
-            return result;
-        }
+       
 
 
     }

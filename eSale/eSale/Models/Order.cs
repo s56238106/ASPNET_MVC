@@ -70,9 +70,14 @@ namespace eSale.Models
         public int ShipperID { get; set; }
 
         /// <summary>
-        /// 出貨公司名稱
+        /// 出貨說明
         /// </summary>
         public string ShipperName { get; set; }
+
+        /// <summary>
+        /// 出貨公司名稱
+        /// </summary>
+        public string CompanyName { get; set; }
 
         /// <summary>
         /// 運費

@@ -7,6 +7,7 @@ namespace eSale.Models
 {
     public class OrderSearchArg
     {
+        public bool vercode { get; set; }
         public string OrderID { get; set; }
         public string CustomerName { get; set; }
         public string EmployeeID { get; set; }

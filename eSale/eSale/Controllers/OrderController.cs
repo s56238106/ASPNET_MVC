@@ -11,40 +11,33 @@ namespace eSale.Controllers
         
         public ActionResult Index(Models.OrderSearchArg arg)
         {
-            ///取得條件訂單
-            Models.OrderService orderService = new Models.OrderService();
-            ViewBag.data = orderService.GetOrderById(arg);
-
-            ///取得員工姓名,ID
-            Models.OrderService emp = new Models.OrderService();
-            List<Models.Order> empname = emp.GetEmpName();
-            List<SelectListItem> EmpData = new List<SelectListItem>();
-            EmpData.Add(new SelectListItem());
-            foreach (var item in empname)
+            if (arg.vercode)
             {
-                EmpData.Add(new SelectListItem()
-                            {
-                                Text = item.EmpName,
-                                Value= item.EmployeeID.ToString()
-                            });
+               ///取得條件訂單
+               Models.OrderService orderService = new Models.OrderService();
+               ViewBag.data = orderService.GetOrderById(arg);
             }
-            ViewBag.EmpData = EmpData;
+            
+            
+            ///取得員工姓名,ID
+            Models.CodeService emp = new Models.CodeService();
+            ViewBag.EmpData = emp.GetEmpName();
 
             ///取得公司名稱
-            Models.OrderService com = new Models.OrderService();
-            List<Models.Order> comdata = com.GetComName();
-            List<SelectListItem> ComData = new List<SelectListItem>();
-            ComData.Add(new SelectListItem());
-            foreach (var item in comdata)
-            {
-                ComData.Add(new SelectListItem()
-                {
-                    Text=item.ShipName
-                });
-            }
-            ViewBag.ComData = ComData;
+            Models.CodeService com = new Models.CodeService();
+            ViewBag.ComData = com.GetComName();
             return View();
         }
+
+
+
+
+        public ActionResult UpdateOrder()
+        {
+            return View();
+        }
+
+
 
 
 
