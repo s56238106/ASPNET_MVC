@@ -58,13 +58,21 @@ namespace eSale.Models
 					INNER JOIN Sales.Customers As B ON A.CustomerID=B.CustomerID
 					INNER JOIN HR.Employees As C On A.EmployeeID=C.EmployeeID
 					INNER JOIN Sales.Shippers As D ON A.ShipperID=D.ShipperID
-                    Where (A.OrderID=@OrderID Or @OrderID='') And 
+
+                    Where 1=1 And 
 						  (B.CompanyName Like @CustomerName Or @CustomerName='') And
                           (C.EmployeeID=@EmployeeID Or @EmployeeID='') And
                           (D.CompanyName=@CompanyName Or @CompanyName='') And
                           (A.OrderDate=@OrderDate Or @OrderDate='') And
                           (A.ShippedDate=@ShippedDate Or @ShippedDate='') And
                           (A.RequiredDate=@RequiredDate Or @RequiredDate='') ";
+
+            if (arg.OrderID!=String.Empty)
+            {
+                sql += "And (A.OrderID=@OrderID)";
+                
+            }
+
 
 			using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
 			{

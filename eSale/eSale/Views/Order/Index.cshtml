@@ -7,7 +7,7 @@
 
 
     <div>
-        @using (Html.BeginForm("Index", "Order",FormMethod.Post,new { id="form1"})) {
+        @using (Html.BeginForm("Index", "Order",FormMethod.Get,new { id="form1"})) {
             <table class="table table-striped">
                 <tr><td>訂單編號</td><td>@Html.TextBox("OrderID")</td></tr>
                 <tr><td>客戶名稱</td><td>@Html.TextBox("CustomerName")</td></tr>

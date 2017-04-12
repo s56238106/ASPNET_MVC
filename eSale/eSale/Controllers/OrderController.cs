@@ -18,7 +18,6 @@ namespace eSale.Controllers
                ViewBag.data = orderService.GetOrderById(arg);
             }
             
-            
             ///取得員工姓名,ID
             Models.CodeService emp = new Models.CodeService();
             ViewBag.EmpData = emp.GetEmpName();
