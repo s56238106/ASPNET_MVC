@@ -8,14 +8,18 @@ namespace eSale.Controllers
 {
     public class OrderController : Controller
     {
-        
+        /// <summary>
+        /// 首頁
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         public ActionResult Index(Models.OrderSearchArg arg)
         {
             if (arg.vercode)
             {
                ///取得條件訂單
                Models.OrderService orderService = new Models.OrderService();
-               ViewBag.data = orderService.GetOrderById(arg);
+               ViewBag.data = orderService.GetOrderByCondition(arg);
             }
             
             ///取得員工姓名,ID
@@ -30,9 +34,16 @@ namespace eSale.Controllers
 
 
 
-
-        public ActionResult UpdateOrder()
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public ActionResult UpdateOrder(string Id)
         {
+            ///修改_取得ID條件訂單
+            Models.OrderService orderService = new Models.OrderService();
+            ViewBag.data = orderService.GetOrderById(Id);
             return View();
         }
 

@@ -43,11 +43,49 @@ namespace eSale.Models
         {
 
         }
+
+
+
+
+        /// <summary>
+        /// 修改_取得ID條件訂單
+        /// </summary>
+        /// <returns></returns>
+        public List<Models.Order> GetOrderById(string Id)
+        {
+            DataTable dt = new DataTable();
+            string sql = @"SELECT 
+					A.OrderID,B.CompanyName As CustomerName,
+					CONVERT(varchar(10),A.OrderDate,111) as OrderDate,CONVERT(varchar(10),A.ShippedDate,111) as ShippedDate,D.CompanyName
+
+					From Sales.Orders As A 
+					INNER JOIN Sales.Customers As B ON A.CustomerID=B.CustomerID
+					INNER JOIN HR.Employees As C On A.EmployeeID=C.EmployeeID
+					INNER JOIN Sales.Shippers As D ON A.ShipperID=D.ShipperID
+
+                    Where (A.OrderID=@OrderID)";
+
+            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.Add(new SqlParameter("@OrderID",Id));
+                SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
+                sqlAdapter.Fill(dt);
+                conn.Close();
+            }
+            return this.MapOrderDataToList(dt);
+
+        }
+
+
+
+
         /// <summary>
         /// 取得條件訂單
         /// </summary>
         /// <returns></returns>
-        public List<Models.Order> GetOrderById(Models.OrderSearchArg arg)
+        public List<Models.Order> GetOrderByCondition(Models.OrderSearchArg arg)
         {
             DataTable dt = new DataTable();
 			string sql = @"SELECT 
@@ -59,7 +97,7 @@ namespace eSale.Models
 					INNER JOIN HR.Employees As C On A.EmployeeID=C.EmployeeID
 					INNER JOIN Sales.Shippers As D ON A.ShipperID=D.ShipperID
 
-                    Where 1=1 And 
+                    Where (A.OrderID=@OrderID Or @OrderID='') And 
 						  (B.CompanyName Like @CustomerName Or @CustomerName='') And
                           (C.EmployeeID=@EmployeeID Or @EmployeeID='') And
                           (D.CompanyName=@CompanyName Or @CompanyName='') And
@@ -67,11 +105,6 @@ namespace eSale.Models
                           (A.ShippedDate=@ShippedDate Or @ShippedDate='') And
                           (A.RequiredDate=@RequiredDate Or @RequiredDate='') ";
 
-            if (arg.OrderID!=String.Empty)
-            {
-                sql += "And (A.OrderID=@OrderID)";
-                
-            }
 
 
 			using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))

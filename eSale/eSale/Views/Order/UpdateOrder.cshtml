@@ -5,4 +5,14 @@
 }
 
 <h2>UpdateOrder</h2>
+    <table>
+        <tr>
+            @((List<eSale.Models.Order>)ViewBag.data).
+
+                @foreach (var item in (List<eSale.Models.Order>)ViewBag.data)
+            {
+                    <td>@item.OrderID</td>
+                }
+</tr>
+    </table>
 
