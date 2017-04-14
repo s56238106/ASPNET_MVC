@@ -35,7 +35,7 @@ namespace eSale.Controllers
 
 
         /// <summary>
-        /// 修改
+        /// 修改畫面
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
@@ -43,17 +43,30 @@ namespace eSale.Controllers
         {
             ///修改_取得ID條件訂單
             Models.OrderService orderService = new Models.OrderService();
-            ViewBag.data = orderService.GetOrderById(Id);
-            ///取得客戶名稱
-            Models.CodeService com = new Models.CodeService();
-            ViewBag.CustData = com.GetCustomer();
-            ///取得員工姓名,ID
+            Models.Order data = orderService.GetOrderById(Id);
+            ///取得List客戶名稱,ID
+            Models.CodeService cus = new Models.CodeService();
+            ViewBag.CustData = cus.GetCustomer();
+            ///取得List員工姓名,ID
             Models.CodeService emp = new Models.CodeService();
             ViewBag.EmpData = emp.GetEmpName();
-            return View(ViewBag.data);
+            ///取得公司名稱
+            Models.CodeService com = new Models.CodeService();
+            ViewBag.ComData = com.GetComName();
+            return View(data);
         }
 
-
+        /// <summary>
+        /// 修改訂單
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        public ActionResult UpdateOrderAction(Models.Order order)
+        {
+            Models.OrderService up = new Models.OrderService();
+            up.UpdateOrder(order);
+            return View();
+        }
 
 
 

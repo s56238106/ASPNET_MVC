@@ -111,8 +111,6 @@ namespace eSale.Models
                     Value = row["CustomerID"].ToString()
                 });
             }
-
-
             return result;
         }
 

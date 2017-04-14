@@ -36,12 +36,50 @@ namespace eSale.Models
         {
 
         }
-        /// <summary>
-        /// 更新訂單
-        /// </summary>
-        public void UpdateOrder()
-        {
 
+        /// <summary>
+		/// 修改訂單
+		/// </summary>
+		/// <param name="order"></param>
+		public void UpdateOrder(Models.Order order)
+        {
+            string sql = @"Update Sales.Orders SET 
+							CustomerID=@custid,
+                            EmployeeID=@empid,
+							OrderDate=@orderdate,
+                            RequiredDate=@requireddate,
+							ShippedDate=@shippeddate,
+							Freight=@freight,
+                            ShipperID=@shipperid,
+							ShipAddress=@shipaddress,
+                            ShipCity=@shipcity,
+							ShipRegion=@shipregion,
+                            ShipPostalCode=@shippostalcode,
+							ShipCountry=@shipcountry,
+                            ShipName=@shipname
+							WHERE OrderID=@orderid";
+
+            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.Add(new SqlParameter("@custid", order.CustomerID==null ? string.Empty: order.CustomerID));
+                cmd.Parameters.Add(new SqlParameter("@empid", order.EmployeeID == null ? string.Empty : order.EmployeeID));
+                cmd.Parameters.Add(new SqlParameter("@orderdate", order.OrderDate == null ? string.Empty : order.OrderDate));
+                cmd.Parameters.Add(new SqlParameter("@requireddate", order.RequiredDate == null ? string.Empty : order.RequiredDate));
+                cmd.Parameters.Add(new SqlParameter("@shippeddate", order.ShippedDate == null ? string.Empty : order.ShippedDate));
+                cmd.Parameters.Add(new SqlParameter("@shipperid", order.ShipperID == null ? string.Empty : order.ShipperID));
+                cmd.Parameters.Add(new SqlParameter("@freight", order.Freight == null ? string.Empty : order.Freight));
+                cmd.Parameters.Add(new SqlParameter("@shipaddress", order.ShipAddress == null ? string.Empty : order.ShipAddress));
+                cmd.Parameters.Add(new SqlParameter("@shipcity", order.ShipCity == null ? string.Empty : order.ShipCity));
+                cmd.Parameters.Add(new SqlParameter("@ShipRegion", order.RequiredDate == null ? string.Empty : order.RequiredDate));
+                cmd.Parameters.Add(new SqlParameter("@shippostalcode", order.ShipPostalCode == null ? string.Empty : order.ShipPostalCode));
+                cmd.Parameters.Add(new SqlParameter("@shipcountry", order.ShipCountry == null ? string.Empty : order.ShipCountry));
+                cmd.Parameters.Add(new SqlParameter("@orderid", order.OrderID == null ? string.Empty : order.OrderID));
+                cmd.Parameters.Add(new SqlParameter("@shipname", order.ShipName == null ? string.Empty : order.ShipName));
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
         }
 
 
@@ -57,11 +95,13 @@ namespace eSale.Models
             string sql = @"SELECT 
 					A.OrderID,
                     B.CompanyName As CustomerName,
+                    A.CustomerID,
                     (FirstName+' '+LastName) as EmpName,
-					CONVERT(varchar(10),A.OrderDate,111) as OrderDate,
-                    CONVERT(varchar(10),A.RequiredDate,111) as RequiredDate,
-                    CONVERT(varchar(10),A.ShippedDate,111) as ShippedDate,
-                    D.CompanyName,A.Freight,A.ShipCountry,A.ShipCity,A.ShipRegion,A.ShipPostalCode,A.ShipAddress,A.ShipName
+                    C.EmployeeID,
+					CONVERT(varchar(10),A.OrderDate,120) as OrderDate,
+                    CONVERT(varchar(10),A.RequiredDate,120) as RequiredDate,
+                    CONVERT(varchar(10),A.ShippedDate,120) as ShippedDate,
+                    D.CompanyName,A.Freight,A.ShipCountry,A.ShipCity,A.ShipRegion,A.ShipPostalCode,A.ShipAddress,A.ShipperID,A.ShipName
 
 					From Sales.Orders As A 
 					INNER JOIN Sales.Customers As B ON A.CustomerID=B.CustomerID
@@ -85,7 +125,9 @@ namespace eSale.Models
             {
                 result.OrderID = item["OrderID"].ToString();
                 result.CustName = item["CustomerName"].ToString();
+                result.CustomerID = item["CustomerID"].ToString();
                 result.EmpName = item["EmpName"].ToString();
+                result.EmployeeID = item["EmployeeID"].ToString();
                 result.OrderDate = item["OrderDate"].ToString();
                 result.RequiredDate = item["RequiredDate"].ToString();
                 result.ShippedDate = item["ShippedDate"].ToString();
@@ -96,11 +138,10 @@ namespace eSale.Models
                 result.ShipRegion = item["ShipRegion"].ToString();
                 result.ShipPostalCode = item["ShipPostalCode"].ToString();
                 result.ShipAddress = item["ShipAddress"].ToString();
+                result.ShipperID = item["ShipperID"].ToString();
                 result.ShipName = item["ShipName"].ToString();
 
             }
-            
-
             return result;
 
         }
@@ -127,7 +168,7 @@ namespace eSale.Models
                     Where (A.OrderID=@OrderID Or @OrderID='') And 
 						  (B.CompanyName Like @CustomerName Or @CustomerName='') And
                           (C.EmployeeID=@EmployeeID Or @EmployeeID='') And
-                          (D.CompanyName=@CompanyName Or @CompanyName='') And
+                          (D.ShipperID=@ShipperID Or @ShipperID='') And
                           (A.OrderDate=@OrderDate Or @OrderDate='') And
                           (A.ShippedDate=@ShippedDate Or @ShippedDate='') And
                           (A.RequiredDate=@RequiredDate Or @RequiredDate='') ";
@@ -142,7 +183,7 @@ namespace eSale.Models
                 cmd.Parameters.Add(new SqlParameter("@OrderID",arg.OrderID==null?string.Empty:arg.OrderID));
                 cmd.Parameters.Add(new SqlParameter("@CustomerName", arg.CustomerName == null ? string.Empty : '%'+arg.CustomerName+'%'));
                 cmd.Parameters.Add(new SqlParameter("@EmployeeID", arg.EmployeeID == null ? string.Empty : arg.EmployeeID));
-                cmd.Parameters.Add(new SqlParameter("@CompanyName", arg.ShipperID == null ? string.Empty : arg.ShipperID));
+                cmd.Parameters.Add(new SqlParameter("@ShipperID", arg.ShipperID == null ? string.Empty : arg.ShipperID));
                 cmd.Parameters.Add(new SqlParameter("@OrderDate", arg.OrderDate == null ? string.Empty : arg.OrderDate));
                 cmd.Parameters.Add(new SqlParameter("@ShippedDate", arg.ShippedDate == null ? string.Empty : arg.ShippedDate));
                 cmd.Parameters.Add(new SqlParameter("@RequiredDate", arg.RequiredDate == null ? string.Empty : arg.RequiredDate));
@@ -168,23 +209,11 @@ namespace eSale.Models
                 result.Add(new Order()
                 {
                     OrderID = row["OrderID"].ToString(),
-                 ///   CustomerID = (int)row["CustomerID"],
                     CustName = row["CustomerName"].ToString(),
-                 ///   EmployeeID = (int)row["EmployeeID"],
-                 ///   EmpName = row["EmpName"].ToString(),
                     OrderDate = row["OrderDate"].ToString(),
-                 ///RequiredDate = row["RequiredDate"] == DBNull.Value ? (DateTime?)null : (DateTime)row["RequiredDate"],
                     ShippedDate = row["ShippedDate"].ToString(),
                     CompanyName=row["CompanyName"].ToString()
-                    ///   ShipperID = (int)row["ShipperID"],
-                    ///   ShipperName = row["ShipperName"].ToString(),
-                    ///   Freight = (decimal)row["Freight"],
-                    ///   ShipName = row["ShipName"].ToString(),
-                    ///   ShipAddress = row["ShipAddress"].ToString(),
-                    ///   ShipCity = row["ShipCity"].ToString(),
-                    ///   ShipRegion = row["ShipRegion"].ToString(),
-                    ///   ShipPostalCode = row["ShipPostalCode"].ToString(),
-                    ///   ShipCountry = row["ShipCountry"].ToString()
+                   
                 });
             }
             return result;
