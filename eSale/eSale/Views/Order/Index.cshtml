@@ -20,7 +20,7 @@
                     <td>需要日期</td><td>@Html.TextBoxFor(model => model.RequiredDate, new { @type = "date" })</td>
                     <td><input type="hidden" name="vercode" value="true"/></td>
                 </tr>
-                <tr><td><input type="submit" /><input type="reset" /></td></tr>
+                <tr><td><input type="submit" /><input type="button" onclick="ResetSearchForm()" value="清除"/></td></tr>
 
             </table>
         
@@ -46,9 +46,9 @@
                         <td>@item.CompanyName</td>
                         <td>@Html.ActionLink("修改", "UpdateOrder", new { id = item.OrderID })</td>
                         <td>
-                            <div>@Html.ActionLink("刪除", "DeleteOrder", new { id = item.OrderID })</div>
-                            @*<a class="btnDelete" href="">刪除</a>
-    <input class="hidOrderId" type="hidden" value='@item.OrderID' />*@
+                          @*  <div>@Html.ActionLink("刪除", "DeleteOrder", new { id = item.OrderID })</div>*@
+                            <a class="btnDelete" href="#">刪除</a>
+                            <input class="hidOrderId" type="hidden" value='@item.OrderID' />
                         </td>
                     </tr>
                 }
@@ -58,10 +58,7 @@
     </div>
         
 <script type="text/javascript">
-
-
     $(".btnDelete").click(function (e) {
-
         var tr = $(this).closest('tr')
         $.ajax({
             type: "POST",
@@ -74,5 +71,15 @@
         });
         return false;
     });
+
+    function ResetSearchForm() {
+        $('#OrderID').val(null);
+        $('#CustomerName').val(null);
+        $('#EmployeeID').val(null);
+        $('#ShipperID').val(null);
+        $('#OrderDate').val(null);
+        $('#ShippedDate').val(null);
+        $('#RequiredDate').val(null);
+    }
 
 </script>

@@ -8,12 +8,12 @@
 {
     <table class="table table-striped">
 
-        <tr><td>客戶名稱</td><td>@Html.DropDownListFor(model => model.CustomerID, (List<SelectListItem>)ViewBag.CustData)</td></tr>
-        <tr><td>負責員工名稱</td><td>@Html.DropDownListFor(model => model.EmployeeID, (List<SelectListItem>)ViewBag.EmpData)</td></tr>
-        <tr><td>訂單日期</td><td>@Html.TextBoxFor(model => model.OrderDate, new { @type = "date" })</td></tr>
-        <tr><td>需要日期</td><td>@Html.TextBoxFor(model => model.RequiredDate, new { @type = "date" })</td></tr>
+        <tr><td>*客戶名稱</td><td>@Html.DropDownListFor(model => model.CustomerID, (List<SelectListItem>)ViewBag.CustData)</td></tr>
+        <tr><td>*負責員工名稱</td><td>@Html.DropDownListFor(model => model.EmployeeID, (List<SelectListItem>)ViewBag.EmpData)</td></tr>
+        <tr><td>*訂單日期</td><td>@Html.TextBoxFor(model => model.OrderDate, new { @type = "date" })</td></tr>
+        <tr><td>*需要日期</td><td>@Html.TextBoxFor(model => model.RequiredDate, new { @type = "date" })</td></tr>
         <tr><td>出貨日期</td><td>@Html.TextBoxFor(model => model.ShippedDate, new { @type = "date" })</td></tr>
-        <tr><td>出貨公司名稱</td><td>@Html.DropDownListFor(model => model.ShipperID, (List<SelectListItem>)ViewBag.ComData)</td></tr>
+        <tr><td>*出貨公司名稱</td><td>@Html.DropDownListFor(model => model.ShipperID, (List<SelectListItem>)ViewBag.ComData)</td></tr>
         <tr><td>運費</td><td>@Html.TextBoxFor(model => model.Freight)</td></tr>
         <tr><td>出貨國家</td><td>@Html.TextBoxFor(model => model.ShipCountry)</td></tr>
         <tr><td>出貨城市</td><td>@Html.TextBoxFor(model => model.ShipCity)</td></tr>
@@ -25,10 +25,29 @@
             <td><input type="hidden" name="vercode" value="true" /></td>
         </tr>
 
-        <tr><td><input type="submit" /><input type="reset" /></td></tr>
+        <tr><td><input type="submit" /><input type="button" onclick="ResetSearchForm()" value="清除" /></td></tr>
     </table>
 }
 
 <div>
     @Html.ActionLink("Back to Home", "Index")
 </div>
+
+<script type="text/javascript">
+    function ResetSearchForm() {
+        $('#CustomerID').val(null);
+        $('#EmployeeID').val(null);
+        $('#OrderDate').val(null);
+        $('#RequiredDate').val(null);
+        $('#ShippedDate').val(null);
+        $('#ShipperID').val(null);
+        $('#Freight').val(null);
+        $('#ShipCountry').val(null);
+        $('#ShipCity').val(null);
+        $('#ShipRegion').val(null);
+        $('#ShipPostalCode').val(null);
+        $('#ShipAddress').val(null);
+        $('#ShipName').val(null);
+
+    }
+</script>

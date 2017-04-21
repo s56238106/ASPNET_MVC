@@ -39,17 +39,17 @@ namespace eSale.Models
 						)
 						Select SCOPE_IDENTITY()
 						";
-            int orderId;
+            int id;
             using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.Add(new SqlParameter("@custid", order.CustomerID == null ? string.Empty : order.CustomerID));
-                cmd.Parameters.Add(new SqlParameter("@empid", order.EmployeeID == null ? string.Empty : order.EmployeeID));
-                cmd.Parameters.Add(new SqlParameter("@orderdate", order.OrderDate == null ? string.Empty : order.OrderDate));
-                cmd.Parameters.Add(new SqlParameter("@requireddate", order.RequiredDate == null ? string.Empty : order.RequiredDate));
+                cmd.Parameters.Add(new SqlParameter("@custid", order.CustomerID));
+                cmd.Parameters.Add(new SqlParameter("@empid", order.EmployeeID));
+                cmd.Parameters.Add(new SqlParameter("@orderdate", order.OrderDate));
+                cmd.Parameters.Add(new SqlParameter("@requireddate", order.RequiredDate));
                 cmd.Parameters.Add(new SqlParameter("@shippeddate", order.ShippedDate == null ? string.Empty : order.ShippedDate));
-                cmd.Parameters.Add(new SqlParameter("@shipperid", order.ShipperID == null ? string.Empty : order.ShipperID));
+                cmd.Parameters.Add(new SqlParameter("@shipperid", order.ShipperID));
                 cmd.Parameters.Add(new SqlParameter("@freight", order.Freight == null ? string.Empty : order.Freight));
                 cmd.Parameters.Add(new SqlParameter("@shipname", order.ShipName == null ? string.Empty : order.ShipName));
                 cmd.Parameters.Add(new SqlParameter("@shipaddress", order.ShipAddress == null ? string.Empty : order.ShipAddress));
@@ -57,18 +57,17 @@ namespace eSale.Models
                 cmd.Parameters.Add(new SqlParameter("@shipregion", order.ShipRegion == null ? string.Empty : order.ShipRegion));
                 cmd.Parameters.Add(new SqlParameter("@shippostalcode", order.ShipPostalCode == null ? string.Empty : order.ShipPostalCode));
                 cmd.Parameters.Add(new SqlParameter("@shipcountry", order.ShipCountry == null ? string.Empty : order.ShipCountry));
-                cmd.ExecuteScalar();
-                ///orderId = (int)cmd.ExecuteScalar();
-                orderId = 1;
+                
+                id = Convert.ToInt32(cmd.ExecuteScalar());
                 conn.Close();
             }
-            return orderId;
+            return id;
 
         }
         /// <summary>
         /// 刪除訂單
         /// </summary>
-        public void DeleteOrderById(string id)
+        public void DeleteOrderById(Models.Order order)
         {
             try
             {
@@ -77,7 +76,7 @@ namespace eSale.Models
                 {
                     conn.Open();
                     SqlCommand cmd = new SqlCommand(sql, conn);
-                    cmd.Parameters.Add(new SqlParameter("@orderid", id));
+                    cmd.Parameters.Add(new SqlParameter("@orderid", order.OrderID));
                     cmd.ExecuteNonQuery();
                     conn.Close();
                 }
@@ -86,7 +85,7 @@ namespace eSale.Models
                 {
                     conn.Open();
                     SqlCommand cmd = new SqlCommand(sql, conn);
-                    cmd.Parameters.Add(new SqlParameter("@orderid", id));
+                    cmd.Parameters.Add(new SqlParameter("@orderid", order.OrderID));
                     cmd.ExecuteNonQuery();
                     conn.Close();
                 }

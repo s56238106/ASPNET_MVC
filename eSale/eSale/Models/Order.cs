@@ -30,11 +30,13 @@ namespace eSale.Models
         /// <summary>
         /// 訂單編號
         /// </summary>
+        [Required]
         public string OrderID { get; set; }
 
         /// <summary>
         /// 客戶代號
         /// </summary>
+        [Required]
         public string CustomerID { get; set; }
 
         /// <summary>
@@ -45,6 +47,7 @@ namespace eSale.Models
         /// <summary>
         /// 業務(員工)代號
         /// </summary>
+        [Required]
         public string EmployeeID { get; set; }
 
         /// <summary>
@@ -55,11 +58,13 @@ namespace eSale.Models
         /// <summary>
         /// 訂單日期
         /// </summary>
+        [Required]
         public string OrderDate { get; set; }
 
         /// <summary>
         /// 需要日期
         /// </summary>
+        [Required]
         public string RequiredDate { get; set; }
 
         /// <summary>
@@ -70,6 +75,7 @@ namespace eSale.Models
         /// <summary>
         /// 出貨公司代號
         /// </summary>
+        [Required]
         public string ShipperID { get; set; }
 
         /// <summary>

@@ -86,7 +86,9 @@ namespace eSale.Controllers
             if (order.vercode)
             {
                 Models.OrderService orderService = new Models.OrderService();
-                int aa = orderService.InsertOrder(order);
+                string a;
+                a=Convert.ToString(orderService.InsertOrder(order));
+                order.OrderID = a;
                 return View("Index");
             }
             else { 
@@ -101,18 +103,18 @@ namespace eSale.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult DeleteOrder(string id)
+        public ActionResult DeleteOrder(Models.Order order)
         {
-            Models.OrderService orderservice = new Models.OrderService();
-            orderservice.DeleteOrderById(id);
-            ///取得員工姓名,ID
-            Models.CodeService emp = new Models.CodeService();
-            ViewBag.EmpData = emp.GetEmpName();
+            try { 
+                 Models.OrderService orderservice = new Models.OrderService();
+                 orderservice.DeleteOrderById(order);
+                 return this.Json(true);
+            }
+            catch
+            {
+                return this.Json(false);
+            }
 
-            ///取得公司名稱
-            Models.CodeService com = new Models.CodeService();
-            ViewBag.ComData = com.GetComName();
-            return View("Index");
         }
 
     }
