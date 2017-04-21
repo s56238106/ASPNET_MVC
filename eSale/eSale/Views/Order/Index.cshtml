@@ -7,6 +7,7 @@
 
 
     <div>
+        <div>@Html.ActionLink("新增訂單", "InsertOrder")</div>
         @using (Html.BeginForm("Index", "Order",FormMethod.Get,new { id="form1"})) {
             <table class="table table-striped">
                 <tr><td>訂單編號</td><td>@Html.TextBoxFor(model => model.OrderID)</td></tr>
@@ -15,8 +16,9 @@
                 <tr><td>出貨公司</td><td>@Html.DropDownListFor(Model => Model.ShipperID,(List<SelectListItem>)ViewBag.ComData)</td></tr>
                 <tr><td>訂購日期</td><td>@Html.TextBoxFor(model => model.OrderDate, new { @type = "date" })</td></tr>
                 <tr><td>出貨日期</td><td>@Html.TextBoxFor(model => model.ShippedDate, new { @type = "date" })</td></tr>
-                <tr><td>需要日期</td><td>@Html.TextBoxFor(model => model.RequiredDate, new { @type = "date" })</td>
-                <td><input type="hidden" name="vercode" value="true"/></td>
+                <tr>
+                    <td>需要日期</td><td>@Html.TextBoxFor(model => model.RequiredDate, new { @type = "date" })</td>
+                    <td><input type="hidden" name="vercode" value="true"/></td>
                 </tr>
                 <tr><td><input type="submit" /><input type="reset" /></td></tr>
 
@@ -25,7 +27,6 @@
 
         if (ViewBag.data != null)
         {
-
             <table class="table table-striped">
                 <tr><td>訂單資訊</td></tr>
                 <tr>
@@ -45,8 +46,9 @@
                         <td>@item.CompanyName</td>
                         <td>@Html.ActionLink("修改", "UpdateOrder", new { id = item.OrderID })</td>
                         <td>
-                            <a class="btnDelete" href="#">刪除</a>
-                            <input class="hidOrderId" type="hidden" value='@item.OrderID' />
+                            <div>@Html.ActionLink("刪除", "DeleteOrder", new { id = item.OrderID })</div>
+                            @*<a class="btnDelete" href="">刪除</a>
+    <input class="hidOrderId" type="hidden" value='@item.OrderID' />*@
                         </td>
                     </tr>
                 }

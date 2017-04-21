@@ -25,16 +25,76 @@ namespace eSale.Models
         /// <summary>
         /// 新增訂單
         /// </summary>
-        public void InsertOrder(Models.Order order)
+        public int InsertOrder(Models.Order order)
         {
+            string sql = @" Insert INTO Sales.Orders
+						 (
+							CustomerID,EmployeeID,OrderDate,RequiredDate,ShippedDate,ShipperID,Freight,
+							ShipName,ShipAddress,ShipCity,ShipRegion,ShipPostalCode,ShipCountry
+						)
+						VALUES
+						(
+							@custid,@empid,@orderdate,@requireddate,@shippeddate,@shipperid,@freight,
+							@shipname,@shipaddress,@shipcity,@shipregion,@shippostalcode,@shipcountry
+						)
+						Select SCOPE_IDENTITY()
+						";
+            int orderId;
+            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.Add(new SqlParameter("@custid", order.CustomerID == null ? string.Empty : order.CustomerID));
+                cmd.Parameters.Add(new SqlParameter("@empid", order.EmployeeID == null ? string.Empty : order.EmployeeID));
+                cmd.Parameters.Add(new SqlParameter("@orderdate", order.OrderDate == null ? string.Empty : order.OrderDate));
+                cmd.Parameters.Add(new SqlParameter("@requireddate", order.RequiredDate == null ? string.Empty : order.RequiredDate));
+                cmd.Parameters.Add(new SqlParameter("@shippeddate", order.ShippedDate == null ? string.Empty : order.ShippedDate));
+                cmd.Parameters.Add(new SqlParameter("@shipperid", order.ShipperID == null ? string.Empty : order.ShipperID));
+                cmd.Parameters.Add(new SqlParameter("@freight", order.Freight == null ? string.Empty : order.Freight));
+                cmd.Parameters.Add(new SqlParameter("@shipname", order.ShipName == null ? string.Empty : order.ShipName));
+                cmd.Parameters.Add(new SqlParameter("@shipaddress", order.ShipAddress == null ? string.Empty : order.ShipAddress));
+                cmd.Parameters.Add(new SqlParameter("@shipcity", order.ShipCity == null ? string.Empty : order.ShipCity));
+                cmd.Parameters.Add(new SqlParameter("@shipregion", order.ShipRegion == null ? string.Empty : order.ShipRegion));
+                cmd.Parameters.Add(new SqlParameter("@shippostalcode", order.ShipPostalCode == null ? string.Empty : order.ShipPostalCode));
+                cmd.Parameters.Add(new SqlParameter("@shipcountry", order.ShipCountry == null ? string.Empty : order.ShipCountry));
+                cmd.ExecuteScalar();
+                ///orderId = (int)cmd.ExecuteScalar();
+                orderId = 1;
+                conn.Close();
+            }
+            return orderId;
 
         }
         /// <summary>
         /// 刪除訂單
         /// </summary>
-        public void DeleteOrderById()
+        public void DeleteOrderById(string id)
         {
-
+            try
+            {
+                string sql = "Delete FROM Sales.OrderDetails Where orderid=@orderid";
+                using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.Add(new SqlParameter("@orderid", id));
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+                sql = "Delete FROM Sales.Orders Where orderid=@orderid";
+                using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.Add(new SqlParameter("@orderid", id));
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -120,6 +180,8 @@ namespace eSale.Models
                 conn.Close();
             }
             Models.Order result = new Models.Order();
+
+
 
             foreach (DataRow item in dt.Rows)
             {

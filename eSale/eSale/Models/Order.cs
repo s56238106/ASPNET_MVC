@@ -22,7 +22,10 @@ namespace eSale.Models
 
         }
 
-
+        /// <summary>
+        /// Controller判斷
+        /// </summary>
+        public bool vercode { get; set; }
 
         /// <summary>
         /// 訂單編號

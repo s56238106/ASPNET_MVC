@@ -41,18 +41,17 @@ namespace eSale.Controllers
         /// <returns></returns>
         public ActionResult UpdateOrder(string Id)
         {
-            ///修改_取得ID條件訂單
             Models.OrderService orderService = new Models.OrderService();
+            Models.CodeService codeservice = new Models.CodeService();
+            
+            ///修改_取得ID條件訂單
             Models.Order data = orderService.GetOrderById(Id);
             ///取得List客戶名稱,ID
-            Models.CodeService cus = new Models.CodeService();
-            ViewBag.CustData = cus.GetCustomer();
+            ViewBag.CustData = codeservice.GetCustomer();
             ///取得List員工姓名,ID
-            Models.CodeService emp = new Models.CodeService();
-            ViewBag.EmpData = emp.GetEmpName();
-            ///取得公司名稱
-            Models.CodeService com = new Models.CodeService();
-            ViewBag.ComData = com.GetComName();
+            ViewBag.EmpData = codeservice.GetEmpName();
+            ///取得公司名稱,ID
+            ViewBag.ComData = codeservice.GetComName();
             return View(data);
         }
 
@@ -74,31 +73,47 @@ namespace eSale.Controllers
         /// 新增訂單畫面
         /// </summary>
         /// <returns></returns>
-        public ActionResult InsertOrder()
-        {
-            return View();
-        }
-
-        /// <summary>
-        /// 新增訂單存檔的Action
-        /// </summary>
-        /// <param name="order"></param>
-        /// <returns></returns>
-        [HttpPost()]
         public ActionResult InsertOrder(Models.Order order)
         {
-            /// Models.OrderService orderService = new Models.OrderService();
-            /// orderService.InsertOrder(order);
+            Models.CodeService codeservice = new Models.CodeService();
+            ///取得List客戶名稱,ID
+            ViewBag.CustData = codeservice.GetCustomer();
+            ///取得List員工姓名,ID
+            ViewBag.EmpData = codeservice.GetEmpName();
+            ///取得公司名稱,ID
+            ViewBag.ComData = codeservice.GetComName();
 
-            ViewBag.Desc1 = "我是ViewBag";
-            ViewData["Desc2"] = "我是ViewData";
-            TempData["Desc3"] = "我是TempData";
-            return RedirectToAction("index");
-
-            /// return View("index");
+            if (order.vercode)
+            {
+                Models.OrderService orderService = new Models.OrderService();
+                int aa = orderService.InsertOrder(order);
+                return View("Index");
+            }
+            else { 
+                return View();
+            }
         }
 
         
+
+        /// <summary>
+        /// 刪除訂單
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult DeleteOrder(string id)
+        {
+            Models.OrderService orderservice = new Models.OrderService();
+            orderservice.DeleteOrderById(id);
+            ///取得員工姓名,ID
+            Models.CodeService emp = new Models.CodeService();
+            ViewBag.EmpData = emp.GetEmpName();
+
+            ///取得公司名稱
+            Models.CodeService com = new Models.CodeService();
+            ViewBag.ComData = com.GetComName();
+            return View("Index");
+        }
 
     }
 }

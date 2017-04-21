@@ -27,7 +27,7 @@ namespace eSale.Models
         {
             DataTable dt = new DataTable();
             string sql = @"SELECT 
-                           EmployeeID,(FirstName+' '+LastName) as name
+                           EmployeeID,(FirstName+' '+LastName) as Name
                            FROM HR.Employees";
             using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
             {
@@ -44,7 +44,7 @@ namespace eSale.Models
             {
                 result.Add(new SelectListItem()
                 {
-                    Text = row["name"].ToString(),
+                    Text = row["Name"].ToString(),
                     Value = row["EmployeeID"].ToString()
                 });
             }
@@ -109,6 +109,38 @@ namespace eSale.Models
                 {
                     Text = row["CustName"].ToString(),
                     Value = row["CustomerID"].ToString()
+                });
+            }
+            return result;
+        }
+
+
+
+        /// <summary>
+        /// 取得產品
+        /// </summary>
+        /// <returns></returns>
+        public List<SelectListItem> GetProduct()
+        {
+            DataTable dt = new DataTable();
+            string sql = @"Select ProductID,ProductName From Production.Products";
+            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataAdapter sqlAdapter = new SqlDataAdapter(cmd);
+                sqlAdapter.Fill(dt);
+                conn.Close();
+            }
+            List<SelectListItem> result = new List<SelectListItem>();
+            result.Add(new SelectListItem());
+            foreach (DataRow row in dt.Rows)
+            {
+                result.Add(new SelectListItem());
+                result.Add(new SelectListItem()
+                {
+                    Text = row["ProductName"].ToString(),
+                    Value = row["ProductID"].ToString()
                 });
             }
             return result;
