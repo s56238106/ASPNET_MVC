@@ -17,7 +17,6 @@ namespace eSale.Models
         public Order()
         {
             var ods = new List<Models.OrderDetails>();
-            ods.Add(new OrderDetails() { ProductId = 58 });
             this.OrderDetails = ods;
 
         }

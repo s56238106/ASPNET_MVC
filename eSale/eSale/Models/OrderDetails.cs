@@ -11,17 +11,17 @@ namespace eSale.Models
         /// <summary>
         /// 訂單編號
         /// </summary>
-        public int OrderId { get; set; }
+        public string OrderId { get; set; }
 
         /// <summary>
         /// 產品代號
         /// </summary>
-        public int ProductId { get; set; }
+        public string ProductId { get; set; }
 
         /// <summary>
         /// 單價
         /// </summary>
-        public int UnitPrice { get; set; }
+        public float UnitPrice { get; set; }
 
         /// <summary>
         /// 數量
@@ -31,6 +31,6 @@ namespace eSale.Models
         /// <summary>
         /// 折扣
         /// </summary>
-        public int Discount { get; set; }
+        public float Discount { get; set; }
     }
 }

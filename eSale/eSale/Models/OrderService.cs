@@ -27,7 +27,7 @@ namespace eSale.Models
         /// </summary>
         public int InsertOrder(Models.Order order)
         {
-            string sql = @" Insert INTO Sales.Orders
+            string sql1 = @" Insert INTO Sales.Orders
 						 (
 							CustomerID,EmployeeID,OrderDate,RequiredDate,ShippedDate,ShipperID,Freight,
 							ShipName,ShipAddress,ShipCity,ShipRegion,ShipPostalCode,ShipCountry
@@ -39,11 +39,13 @@ namespace eSale.Models
 						)
 						Select SCOPE_IDENTITY()
 						";
+            string sql2 = @"INSERT INTO Sales.OrderDetails(OrderID,ProductID,UnitPrice,Qty,Discount)
+                        VALUES(@OrderID,@ProductID,@UnitPrice,@Qty,@Discount)";
             int id;
             using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlCommand cmd = new SqlCommand(sql1, conn);
                 cmd.Parameters.Add(new SqlParameter("@custid", order.CustomerID));
                 cmd.Parameters.Add(new SqlParameter("@empid", order.EmployeeID));
                 cmd.Parameters.Add(new SqlParameter("@orderdate", order.OrderDate));
@@ -59,6 +61,21 @@ namespace eSale.Models
                 cmd.Parameters.Add(new SqlParameter("@shipcountry", order.ShipCountry == null ? string.Empty : order.ShipCountry));
                 
                 id = Convert.ToInt32(cmd.ExecuteScalar());
+
+                cmd = new SqlCommand(sql2,conn);
+                cmd.Parameters.Add(new SqlParameter("@OrderID", id));
+                for (int i = 0; i < order.OrderDetails.Count; i++)
+                {
+                    
+                    cmd.Parameters.Add(new SqlParameter("@ProductID", order.OrderDetails[i].ProductId));
+                    cmd.Parameters.Add(new SqlParameter("@UnitPrice", order.OrderDetails[i].UnitPrice));
+                    cmd.Parameters.Add(new SqlParameter("@Qty", order.OrderDetails[i].Qty));
+                    cmd.Parameters.Add(new SqlParameter("@Discount", order.OrderDetails[i].Discount));
+                    cmd.ExecuteScalar();
+                }
+
+
+
                 conn.Close();
             }
             return id;
@@ -160,13 +177,14 @@ namespace eSale.Models
 					CONVERT(varchar(10),A.OrderDate,120) as OrderDate,
                     CONVERT(varchar(10),A.RequiredDate,120) as RequiredDate,
                     CONVERT(varchar(10),A.ShippedDate,120) as ShippedDate,
-                    D.CompanyName,A.Freight,A.ShipCountry,A.ShipCity,A.ShipRegion,A.ShipPostalCode,A.ShipAddress,A.ShipperID,A.ShipName
+                    D.CompanyName,A.Freight,A.ShipCountry,A.ShipCity,A.ShipRegion,A.ShipPostalCode,A.ShipAddress,A.ShipperID,A.ShipName,
+                    E.ProductID,E.UnitPrice,E.Qty,E.Discount
 
 					From Sales.Orders As A 
 					INNER JOIN Sales.Customers As B ON A.CustomerID=B.CustomerID
 					INNER JOIN HR.Employees As C On A.EmployeeID=C.EmployeeID
 					INNER JOIN Sales.Shippers As D ON A.ShipperID=D.ShipperID
-
+                    INNER JOIN Sales.OrderDetails As E ON A.OrderID=E.OrderID
                     Where (A.OrderID=@OrderID)";
 
             using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
@@ -181,7 +199,7 @@ namespace eSale.Models
             Models.Order result = new Models.Order();
 
 
-
+            int c = 0;
             foreach (DataRow item in dt.Rows)
             {
                 result.OrderID = item["OrderID"].ToString();
@@ -202,6 +220,18 @@ namespace eSale.Models
                 result.ShipperID = item["ShipperID"].ToString();
                 result.ShipName = item["ShipName"].ToString();
 
+                Models.OrderDetails detail = new Models.OrderDetails();
+                detail.ProductId= item["ProductId"].ToString();
+                detail.UnitPrice = float.Parse(item["UnitPrice"].ToString());
+                detail.Qty = decimal.Parse(item["Qty"].ToString());
+                detail.Discount = float.Parse(item["Discount"].ToString());
+                result.OrderDetails.Add(detail);
+
+                //result.OrderDetails[c].ProductId = item["ProductId"].ToString();
+                //result.OrderDetails[c].UnitPrice = int.Parse(item["UnitPrice"].ToString());
+                //result.OrderDetails[c].Qty = decimal.Parse(item["Qty"].ToString());
+                //result.OrderDetails[c].Discount = float.Parse(item["Discount"].ToString());
+                c++;
             }
             return result;
 
@@ -226,7 +256,7 @@ namespace eSale.Models
 					INNER JOIN HR.Employees As C On A.EmployeeID=C.EmployeeID
 					INNER JOIN Sales.Shippers As D ON A.ShipperID=D.ShipperID
 
-                    Where (A.OrderID=@OrderID Or @OrderID='') And 
+                    Where (A.OrderID Like @OrderID Or @OrderID='') And 
 						  (B.CompanyName Like @CustomerName Or @CustomerName='') And
                           (C.EmployeeID=@EmployeeID Or @EmployeeID='') And
                           (D.ShipperID=@ShipperID Or @ShipperID='') And
@@ -241,7 +271,7 @@ namespace eSale.Models
 				conn.Open();
 				SqlCommand cmd = new SqlCommand(sql, conn);
                 
-                cmd.Parameters.Add(new SqlParameter("@OrderID",arg.OrderID==null?string.Empty:arg.OrderID));
+                cmd.Parameters.Add(new SqlParameter("@OrderID",arg.OrderID==null?string.Empty:'%'+arg.OrderID+'%'));
                 cmd.Parameters.Add(new SqlParameter("@CustomerName", arg.CustomerName == null ? string.Empty : '%'+arg.CustomerName+'%'));
                 cmd.Parameters.Add(new SqlParameter("@EmployeeID", arg.EmployeeID == null ? string.Empty : arg.EmployeeID));
                 cmd.Parameters.Add(new SqlParameter("@ShipperID", arg.ShipperID == null ? string.Empty : arg.ShipperID));

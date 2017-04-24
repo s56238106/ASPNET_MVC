@@ -52,6 +52,8 @@ namespace eSale.Controllers
             ViewBag.EmpData = codeservice.GetEmpName();
             ///取得公司名稱,ID
             ViewBag.ComData = codeservice.GetComName();
+            ///取得產品名稱,ID
+            ViewBag.ProData = codeservice.GetProduct();
             return View(data);
         }
 
@@ -82,6 +84,8 @@ namespace eSale.Controllers
             ViewBag.EmpData = codeservice.GetEmpName();
             ///取得公司名稱,ID
             ViewBag.ComData = codeservice.GetComName();
+            ///取得產品名稱,ID
+            ViewBag.ProData = codeservice.GetProduct();
 
             if (order.vercode)
             {
@@ -92,7 +96,7 @@ namespace eSale.Controllers
                 return View("Index");
             }
             else { 
-                return View();
+                return View(order);
             }
         }
 

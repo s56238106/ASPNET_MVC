@@ -2,8 +2,9 @@
 
 @{
     ViewBag.Title = "訂單查詢";
-    Layout = "~/Views/_LayoutPage.cshtml";
 }
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
 
 
     <div>
@@ -17,8 +18,8 @@
                 <tr><td>訂購日期</td><td>@Html.TextBoxFor(model => model.OrderDate, new { @type = "date" })</td></tr>
                 <tr><td>出貨日期</td><td>@Html.TextBoxFor(model => model.ShippedDate, new { @type = "date" })</td></tr>
                 <tr>
-                    <td>需要日期</td><td>@Html.TextBoxFor(model => model.RequiredDate, new { @type = "date" })</td>
-                    <td><input type="hidden" name="vercode" value="true"/></td>
+                    <td>需要日期</td><td>@Html.TextBoxFor(model => model.RequiredDate, new { @type = "date" })<input type="hidden" name="vercode" value="true" /></td>
+                    
                 </tr>
                 <tr><td><input type="submit" /><input type="button" onclick="ResetSearchForm()" value="清除"/></td></tr>
 

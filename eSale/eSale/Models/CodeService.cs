@@ -135,7 +135,6 @@ namespace eSale.Models
             result.Add(new SelectListItem());
             foreach (DataRow row in dt.Rows)
             {
-                result.Add(new SelectListItem());
                 result.Add(new SelectListItem()
                 {
                     Text = row["ProductName"].ToString(),
