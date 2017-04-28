@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace eSale.Models
 {
@@ -16,16 +17,19 @@ namespace eSale.Models
         /// <summary>
         /// 產品代號
         /// </summary>
+        [Required]
         public string ProductId { get; set; }
 
         /// <summary>
         /// 單價
         /// </summary>
+        [Required]
         public float UnitPrice { get; set; }
 
         /// <summary>
         /// 數量
         /// </summary>
+        [Required]
         public decimal Qty { get; set; }
 
         /// <summary>

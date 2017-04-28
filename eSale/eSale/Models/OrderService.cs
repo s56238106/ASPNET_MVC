@@ -62,11 +62,11 @@ namespace eSale.Models
                 
                 id = Convert.ToInt32(cmd.ExecuteScalar());
 
-                cmd = new SqlCommand(sql2,conn);
-                cmd.Parameters.Add(new SqlParameter("@OrderID", id));
+                
                 for (int i = 0; i < order.OrderDetails.Count; i++)
                 {
-                    
+                    cmd = new SqlCommand(sql2,conn);
+                    cmd.Parameters.Add(new SqlParameter("@OrderID", id));
                     cmd.Parameters.Add(new SqlParameter("@ProductID", order.OrderDetails[i].ProductId));
                     cmd.Parameters.Add(new SqlParameter("@UnitPrice", order.OrderDetails[i].UnitPrice));
                     cmd.Parameters.Add(new SqlParameter("@Qty", order.OrderDetails[i].Qty));
@@ -133,7 +133,14 @@ namespace eSale.Models
                             ShipPostalCode=@shippostalcode,
 							ShipCountry=@shipcountry,
                             ShipName=@shipname
-							WHERE OrderID=@orderid";
+							WHERE OrderID=@orderid
+
+                            DELETE FROM Sales.OrderDetails WHERE OrderID=@orderid";
+
+            string sql2 = @"INSERT INTO Sales.OrderDetails 
+                            (OrderId,ProductId,Qty,UnitPrice)
+                            Values
+                            (@orderid,@productid,@unitprice,@qty)";
 
             using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
             {
@@ -154,6 +161,20 @@ namespace eSale.Models
                 cmd.Parameters.Add(new SqlParameter("@orderid", order.OrderID == null ? string.Empty : order.OrderID));
                 cmd.Parameters.Add(new SqlParameter("@shipname", order.ShipName == null ? string.Empty : order.ShipName));
                 cmd.ExecuteNonQuery();
+
+                for (int i = 0; i < order.OrderDetails.Count; i++)
+                {
+                    cmd=new SqlCommand(sql2, conn);
+                    cmd.Parameters.Add(new SqlParameter("@orderid", order.OrderID == null ? string.Empty : order.OrderID));
+                    cmd.Parameters.Add(new SqlParameter("@productid", order.OrderDetails[i].ProductId == null ? string.Empty : order.OrderDetails[i].ProductId));
+                    cmd.Parameters.Add(new SqlParameter("@unitprice", order.OrderDetails[i].UnitPrice));
+                    cmd.Parameters.Add(new SqlParameter("@qty", order.OrderDetails[i].Qty));
+                    cmd.ExecuteScalar();
+                }
+
+
+
+
                 conn.Close();
             }
         }
@@ -199,7 +220,7 @@ namespace eSale.Models
             Models.Order result = new Models.Order();
 
 
-            int c = 0;
+            //int c = 0;
             foreach (DataRow item in dt.Rows)
             {
                 result.OrderID = item["OrderID"].ToString();
@@ -231,7 +252,7 @@ namespace eSale.Models
                 //result.OrderDetails[c].UnitPrice = int.Parse(item["UnitPrice"].ToString());
                 //result.OrderDetails[c].Qty = decimal.Parse(item["Qty"].ToString());
                 //result.OrderDetails[c].Discount = float.Parse(item["Discount"].ToString());
-                c++;
+                //c++;
             }
             return result;
 

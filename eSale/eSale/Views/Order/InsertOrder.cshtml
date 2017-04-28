@@ -41,12 +41,14 @@
             <td>小計</td>
         </tr>
         <tbody id="tbContent">
+
+
             @for (int i = 0; i < Model.OrderDetails.Count; i++)
             {
                 <tr>
-                    <td>@Html.DropDownListFor(model => model.OrderDetails[i].ProductId, (List<SelectListItem>)ViewBag.ProData)</td>
-                    <td>@Html.TextBoxFor(model => model.OrderDetails[i].UnitPrice)</td>
-                    <td>@Html.TextBoxFor(model => model.OrderDetails[i].Qty)</td>
+                    <td>@Html.DropDownListFor(model => model.OrderDetails[i].ProductId, (List<SelectListItem>)ViewBag.ProData, new { @class = "ProductId" })</td>
+                    <td>@Html.TextBoxFor(model => model.OrderDetails[i].UnitPrice, new { @class = "UnitPrice" })</td>
+                    <td>@Html.TextBoxFor(model => model.OrderDetails[i].Qty, new { @class = "Qty" })</td>
                     <td></td>
                     <td><button type="button" class="btnRemove">取消</button></td>
                 </tr>

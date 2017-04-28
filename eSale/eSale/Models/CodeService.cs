@@ -27,7 +27,7 @@ namespace eSale.Models
         {
             DataTable dt = new DataTable();
             string sql = @"SELECT 
-                           EmployeeID,(FirstName+' '+LastName) as Name
+                           EmployeeId,(FirstName+' '+LastName) as Name
                            FROM HR.Employees";
             using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
             {
@@ -45,7 +45,7 @@ namespace eSale.Models
                 result.Add(new SelectListItem()
                 {
                     Text = row["Name"].ToString(),
-                    Value = row["EmployeeID"].ToString()
+                    Value = row["EmployeeId"].ToString()
                 });
             }
             return result;
@@ -60,7 +60,7 @@ namespace eSale.Models
         public List<SelectListItem> GetComName()
         {
             DataTable dt = new DataTable();
-            string sql = @"SELECT CompanyName,ShipperID
+            string sql = @"SELECT CompanyName,ShipperId
                            FROM Sales.Shippers";
             using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
             {
@@ -77,7 +77,7 @@ namespace eSale.Models
                 result.Add(new SelectListItem()
                 {
                     Text = row["CompanyName"].ToString(),
-                    Value = row["ShipperID"].ToString()
+                    Value = row["ShipperId"].ToString()
                 });
             }
             return result;
@@ -91,7 +91,7 @@ namespace eSale.Models
         public List<SelectListItem> GetCustomer()
         {
             DataTable dt = new DataTable();
-            string sql = @"Select CustomerID,CompanyName As CustName FROM Sales.Customers";
+            string sql = @"Select CustomerId,CompanyName As CustName FROM Sales.Customers";
             using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
             {
                 conn.Open();
@@ -107,7 +107,7 @@ namespace eSale.Models
                 result.Add(new SelectListItem()
                 {
                     Text = row["CustName"].ToString(),
-                    Value = row["CustomerID"].ToString()
+                    Value = row["CustomerId"].ToString()
                 });
             }
             return result;
@@ -122,7 +122,7 @@ namespace eSale.Models
         public List<SelectListItem> GetProduct()
         {
             DataTable dt = new DataTable();
-            string sql = @"Select ProductID,ProductName From Production.Products";
+            string sql = @"Select ProductId,ProductName From Production.Products";
             using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
             {
                 conn.Open();
@@ -138,7 +138,7 @@ namespace eSale.Models
                 result.Add(new SelectListItem()
                 {
                     Text = row["ProductName"].ToString(),
-                    Value = row["ProductID"].ToString()
+                    Value = row["ProductId"].ToString()
                 });
             }
             return result;

@@ -46,6 +46,7 @@ namespace eSale.Controllers
             
             ///修改_取得ID條件訂單
             Models.Order data = orderService.GetOrderById(Id);
+            Models.Order data2 = orderService.GetOrderById(Id);
             ///取得List客戶名稱,ID
             ViewBag.CustData = codeservice.GetCustomer();
             ///取得List員工姓名,ID
@@ -72,7 +73,7 @@ namespace eSale.Controllers
 
 
         /// <summary>
-        /// 新增訂單畫面
+        /// 新增訂單
         /// </summary>
         /// <returns></returns>
         public ActionResult InsertOrder(Models.Order order)
